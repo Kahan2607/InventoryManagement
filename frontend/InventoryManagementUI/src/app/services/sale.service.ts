@@ -21,6 +21,9 @@ export class SaleService {
   private saleSubject = new BehaviorSubject<Sale[]>([]);
   sales$ = this.saleSubject.asObservable();
 
+  private dataSource = new BehaviorSubject<string>('0');
+  currentData = this.dataSource.asObservable();
+
   constructor(private http: HttpClient) { 
 
   }
@@ -56,6 +59,7 @@ export class SaleService {
       });
     }
 
+<<<<<<< HEAD
   updateSaleData(sale: Sale){
     this.updatedSale = sale;
   }
@@ -72,4 +76,9 @@ export class SaleService {
     };
   }
 
+=======
+  updateData(data: string) {
+    this.dataSource.next(data);
+  }
+>>>>>>> 559d66c (feat(sale): added the functionality to edit the records of a sale.)
 }

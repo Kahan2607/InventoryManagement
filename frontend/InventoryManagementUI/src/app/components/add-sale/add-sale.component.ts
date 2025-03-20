@@ -46,10 +46,17 @@ export class AddSaleComponent {
     private router: Router,
   )
   {
+<<<<<<< HEAD
     // this._saleService.currentData.subscribe(data => this.data = data);
     // console.log(this.data);
     // this.newData = parseInt(this.data);
     // console.log(typeof(this.newData));
+=======
+    this._saleService.currentData.subscribe(data => this.data = data);
+    console.log(this.data);
+    this.newData = parseInt(this.data);
+    console.log(typeof(this.newData));
+>>>>>>> 559d66c (feat(sale): added the functionality to edit the records of a sale.)
     
 
     this.addSaleForm = this._formBuilder.group({
@@ -93,6 +100,12 @@ export class AddSaleComponent {
 
   async onSubmit(){
     if(this.addSaleForm.valid){
+<<<<<<< HEAD
+=======
+      // const tempDate = new Date().toISOString().split("T")[0];
+      console.log(this.newData);
+      
+>>>>>>> 559d66c (feat(sale): added the functionality to edit the records of a sale.)
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       const newSaleRecord: AddSale = {
@@ -116,6 +129,7 @@ export class AddSaleComponent {
           console.log("I am in the api call ");
           console.log(newSaleRecord);
           this._saleService.addNewSalesRecord(newSaleRecord);
+<<<<<<< HEAD
         }
         else{
           console.log("Updating the record");
@@ -134,6 +148,18 @@ export class AddSaleComponent {
 
         this.addSaleForm.reset();
         this.router.navigate(['/sales']);
+=======
+          this.addSaleForm.reset();
+          this.router.navigate(['/sales']);
+        }
+        else{
+          console.log("Updating the record");
+          
+          this._saleService.updateSalesRecord(newSaleRecord);
+          this.addSaleForm.reset();
+          this.router.navigate(['/sales']);
+        }
+>>>>>>> 559d66c (feat(sale): added the functionality to edit the records of a sale.)
       }
       
 

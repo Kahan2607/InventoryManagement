@@ -66,8 +66,20 @@ export class SaleComponent {
   }
 
   updateSalesRecord(sale: Sale){
+<<<<<<< HEAD
     this.saleService.isAdd = false;
     this.saleService.updateSaleData(sale);
     this.router.navigate(['sales/update-sales']);
   }
+=======
+    const isEdit = true;
+    const saleId = sale['salesId'];
+    this.sendData(saleId.toString());
+    this.router.navigate(['sales/update-sales']);
+  }
+
+  sendData(saleId: string) {
+    this.saleService.updateData(saleId);
+  }
+>>>>>>> 559d66c (feat(sale): added the functionality to edit the records of a sale.)
 }
