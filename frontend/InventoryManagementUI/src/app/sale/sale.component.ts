@@ -63,8 +63,8 @@ export class SaleComponent {
   }
 
   addNewSale(){
-    this.saleService.isAdd = true;
-    this.saleService.resetUpdatedSale();
+    console.log("hello in the add new sale method of sale component");
+    
     this.router.navigate(['sales/add-sales']);
   }
 
@@ -74,12 +74,6 @@ export class SaleComponent {
   }
 
   updateSalesRecord(sale: Sale){
-<<<<<<< HEAD
-    this.saleService.isAdd = false;
-    this.saleService.updateSaleData(sale);
-    this.router.navigate(['sales/update-sales']);
-  }
-=======
     const isEdit = true;
     const saleId = sale['salesId'];
     this.sendData(saleId.toString());
@@ -89,8 +83,4 @@ export class SaleComponent {
   sendData(saleId: string) {
     this.saleService.updateData(saleId);
   }
->>>>>>> 559d66c (feat(sale): added the functionality to edit the records of a sale.)
-=======
-
->>>>>>> ec0d710 (feat(sale): added a new component for sales.)
 }

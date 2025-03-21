@@ -59,26 +59,23 @@ export class SaleService {
       });
     }
 
-<<<<<<< HEAD
-  updateSaleData(sale: Sale){
-    this.updatedSale = sale;
-  }
+    updateSaleData(sale: Sale){
+      this.updatedSale = sale;
+    }
+  
+    resetUpdatedSale(){
+      this.updatedSale = {
+        salesId: 0,
+        itemId: 0,
+        quantity: 0,
+        price: 0,
+        salesAmount: 0,
+        salesDate: new Date(),
+        insertedDate: new Date()
+      };
+    }
 
-  resetUpdatedSale(){
-    this.updatedSale = {
-      salesId: 0,
-      itemId: 0,
-      quantity: 0,
-      price: 0,
-      salesAmount: 0,
-      salesDate: new Date(),
-      insertedDate: new Date()
-    };
-  }
-
-=======
   updateData(data: string) {
     this.dataSource.next(data);
   }
->>>>>>> 559d66c (feat(sale): added the functionality to edit the records of a sale.)
 }
