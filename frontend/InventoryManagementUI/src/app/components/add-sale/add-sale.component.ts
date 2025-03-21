@@ -18,29 +18,38 @@ import { AddSale } from '../../model/addSale.type';
 })
 export class AddSaleComponent {
   addSaleForm: FormGroup;
-  itemSales: {
+  itemData: {
     itemId: number;
     itemName: string;
     isEdit: boolean;
   }[] = [];
 
+  editSaleData: Sale = {
+    salesId: 0,
+    itemId: 0,
+    quantity: 0,
+    price: 0,
+    salesAmount: 0,
+    salesDate: new Date(),
+    insertedDate: new Date(),
+  };
 
+  isAdd: boolean = false;
 
-  data: string = '';
-  newData: number = 0;
+  // data: string = '';
+  // newData: number = 0;
   constructor
   (
     private _formBuilder: FormBuilder, 
     private _itemService: ItemService, 
-    // private _categoryService: CategoryService,
     private _saleService: SaleService,
     private router: Router,
   )
   {
-    this._saleService.currentData.subscribe(data => this.data = data);
-    console.log(this.data);
-    this.newData = parseInt(this.data);
-    console.log(typeof(this.newData));
+    // this._saleService.currentData.subscribe(data => this.data = data);
+    // console.log(this.data);
+    // this.newData = parseInt(this.data);
+    // console.log(typeof(this.newData));
     
 
     this.addSaleForm = this._formBuilder.group({
@@ -50,6 +59,18 @@ export class AddSaleComponent {
       salesDate: ['', Validators.required], // Date input
       // insertedDate: [new Date(), Validators.required] // Default to current date
     });
+
+    this.isAdd = this._saleService.isAdd;
+    this.editSaleData = this._saleService.updatedSale;
+
+    this.addSaleForm.patchValue({
+        item: this.editSaleData.itemId,
+        quantity: this.editSaleData.quantity,
+        price: this.editSaleData.price,
+        salesAmount: this.editSaleData.salesAmount, 
+        salesDate: this.editSaleData.salesDate,
+    });
+
   }
 
   ngOnInit(){
@@ -66,19 +87,16 @@ export class AddSaleComponent {
       }) )
     ))
     .subscribe(data => {
-      this.itemSales = data;
+      this.itemData = data;
     });  
   }
 
   async onSubmit(){
     if(this.addSaleForm.valid){
-      // const tempDate = new Date().toISOString().split("T")[0];
-      console.log(this.newData);
-      
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       const newSaleRecord: AddSale = {
-        salesId: this.newData,
+        salesId: this.editSaleData.salesId,
         itemId: this.addSaleForm.value.item,
         quantity: this.addSaleForm.value.quantity,
         price: this.addSaleForm.value.price,
@@ -92,23 +110,30 @@ export class AddSaleComponent {
         console.log("dates are compared");
         alert('Add valid salesDate');
         this.router.navigate(['sales/add-sales']);
-        
       }
       else{
-        if(newSaleRecord.salesId === 0){
+        if(this.isAdd === true){
           console.log("I am in the api call ");
           console.log(newSaleRecord);
           this._saleService.addNewSalesRecord(newSaleRecord);
-          this.addSaleForm.reset();
-          this.router.navigate(['/sales']);
         }
         else{
           console.log("Updating the record");
-          
           this._saleService.updateSalesRecord(newSaleRecord);
-          this.addSaleForm.reset();
-          this.router.navigate(['/sales']);
+          this._saleService.updatedSale = {
+            salesId: 0,
+            itemId: 0,
+            quantity: 0,
+            price: 0,
+            salesAmount: 0,
+            salesDate: new Date(),
+            insertedDate: new Date()
+          };
+          
         }
+
+        this.addSaleForm.reset();
+        this.router.navigate(['/sales']);
       }
       
 
