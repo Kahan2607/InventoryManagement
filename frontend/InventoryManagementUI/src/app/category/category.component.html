@@ -3,17 +3,23 @@
     
   <button (click)="openDialog()">Add Category</button>
 
+  <label for="categoryStatus">Status:</label>
+  <select name="categoryStatus" (change)="filterCategories($event)">
+    <option value="all">ALL</option>
+    <option value="active">Active</option>
+    <option value="inactive">Inactive</option>
+  </select>
   <table class="category-list-table">
       <thead>
         <tr>
-          <th>CategoryId</th>
-          <th>CategoryName</th>
+          <th (click)="sortByCategoryId()">CategoryId</th>
+          <th (click)="sortByCategoryName()">CategoryName</th>
           <th>Active</th>
           <th>Actions</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let items of categoryItems">
+        <tr *ngFor="let items of filteredCategories">
           <td>{{ items.categoryId }}</td>
           <td>{{ items.name }}</td>
           <td>{{ items.active }}</td>

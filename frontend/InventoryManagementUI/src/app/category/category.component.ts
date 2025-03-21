@@ -5,6 +5,8 @@ import { NgFor } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogueBoxComponent } from '../components/dialogue-box/dialogue-box.component';
 import { FormsModule } from '@angular/forms';
+import { groupBy, map } from 'rxjs';
+import { B } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-category',
@@ -13,17 +15,22 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './category.component.scss'
 })
 export class CategoryComponent {
-  categoryItems: Category[] = [];
+  categories: Category[] = [];
+  filteredCategories: Category[] = [];
   constructor(private categoryService: CategoryService, public dialog: MatDialog){
   }
 
-  
+  isDescendingId: boolean = false;
+  isDescendingName: boolean = false;
+  // isActive: boolean = false;
+
   ngOnInit(): void {
     
     this.categoryService.getCategoriesFromApi();
     this.categoryService.categories$.subscribe(
       (data) => {
-        this.categoryItems = data;
+        this.categories = data;
+        this.filteredCategories = [...this.categories];
       }
     );
   }
@@ -61,4 +68,30 @@ export class CategoryComponent {
     this.categoryService.deleteACategory(categoryId);
   }
 
+
+  sortByCategoryId(){
+    this.isDescendingId =  !this.isDescendingId;
+    this.categories.sort((a,b) => 
+      this.isDescendingId ? b.categoryId - a.categoryId: a.categoryId - b.categoryId
+    );
+  }
+
+  sortByCategoryName(){
+    this.isDescendingName = !this.isDescendingName;
+    this.categories.sort((a,b) => 
+      this.isDescendingName ? b.name.localeCompare(a.name): a.name.localeCompare(b.name) 
+    );
+  }
+
+  filterCategories(event: Event){
+    const selectedValue = (event.target as HTMLSelectElement).value;
+    
+    if (selectedValue === 'all'){
+      this.filteredCategories = this.categories;
+    }else if (selectedValue === 'active') {
+      this.filteredCategories = this.categories.filter(category => category.active);
+    }else if (selectedValue === 'inactive') {
+      this.filteredCategories = this.categories.filter(category => !category.active);
+    }
+  }
 }
