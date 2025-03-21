@@ -7,15 +7,18 @@ import { Item } from '../model/item.type';
   providedIn: 'root'
 })
 export class ItemService {
+
+  isAdd: boolean = false;
+  updatedItem: Item = {
+    itemId: 0,
+    categoryId: 0,
+    active: false,
+    name: ''
+  }; 
+
+
   private itemsSubject = new BehaviorSubject<Item[]>([]);
   items$ = this.itemsSubject.asObservable();
-  
-  private dataSource = new BehaviorSubject<string>('0');
-  currentData = this.dataSource.asObservable();
-
-  private itemDataSource = new BehaviorSubject<Item | null>(null);;
-  currentItemData = this.itemDataSource.asObservable();
-  
 
   constructor(private http: HttpClient) { }
 
@@ -56,11 +59,16 @@ export class ItemService {
     });
   }
 
-  updateData(data: string) {
-    this.dataSource.next(data);
+  updateItemData(item: Item){
+    this.updatedItem = item;
   }
 
-  updateItemData(item: Item){
-    this.itemDataSource.next(item);
+  resetUpdatedItem(){
+    this.updatedItem = {
+      itemId: 0,
+      categoryId: 0,
+      active: false,
+      name: ''
+    };
   }
 }

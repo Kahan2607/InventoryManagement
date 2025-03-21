@@ -42,13 +42,14 @@ export class ItemComponent {
         }))
       )
     ).subscribe(data => {
-      // console.log("CategoryName: ",data);
-      
       this.itemsData = data;
     });
   }
 
   addNewItem(){
+    this.itemService.isAdd = true;
+    console.log("add-item");
+    this.itemService.resetUpdatedItem();
     this.router.navigate(['/items/add-item'])
   }
 
@@ -57,19 +58,8 @@ export class ItemComponent {
   }
 
   updateItem(item: Item){
-    const isEdit = true;
-    const itemId = item['itemId'];
-    this.sendData(itemId.toString());
-    this.sendItemData(item);
+    this.itemService.isAdd = false;
+    this.itemService.updateItemData(item);
     this.router.navigate(['items/update-item']);
   }
-
-  sendData(itemId: string) {
-    this.itemService.updateData(itemId);
-  }
-
-  sendItemData(item: Item){
-    this.itemService.updateItemData(item);
-  }
-  
 }

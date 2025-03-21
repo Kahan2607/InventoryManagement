@@ -9,7 +9,7 @@
 
         <label for="category">Category</label>
         <select formControlName="category" >
-            <option *ngFor="let category of categoryItem" [value]="category.categoryId">
+            <option *ngFor="let category of categoryData" [value]="category.categoryId">
                 {{ category.categoryName }}
             </option>
         </select>

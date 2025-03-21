@@ -16,21 +16,19 @@ import { Router } from '@angular/router';
 })
 export class AddItemComponent {
   addItemForm: FormGroup;
-  categoryItem: {
+  categoryData: {
     categoryId: number;
     categoryName: string;
     isEdit: boolean;
   }[] = [];
 
+  isAdd: boolean = true;
   editItemData: Item = {
     categoryId: 0,
     itemId: 0,
     name: '',
     active: false
   };
-
-  data: string = '';
-  newData: number = 0;
   constructor
   (
     private _formBuilder: FormBuilder, 
@@ -39,40 +37,25 @@ export class AddItemComponent {
     private router: Router,
   )
   {
-    this._itemService.currentData.subscribe(data => this.data = data);
-    this.newData = parseInt(this.data);
-    
-
     this.addItemForm = this._formBuilder.group({
       name: ['', Validators.required],
       category: ['', Validators.required],
       active: [false, Validators.required]
     });
+    
+    this.isAdd = this._itemService.isAdd;
+    this.editItemData = this._itemService.updatedItem;
 
-    if (this.newData !== 0) {
-      console.log(this.newData);
-      
-      this._itemService.currentItemData.subscribe(item => {
-        if (item) {
-          this.editItemData = { ...item }; 
-          console.log("Received Item Data:", this.editItemData);
-
-          this.addItemForm.patchValue({
-            name: this.editItemData.name,
-            category: this.editItemData.categoryId,
-            active: this.editItemData.active
-          });
-        }
-      });
-    }
+    this.addItemForm.patchValue({
+      name: this.editItemData.name,
+      category: this.editItemData.categoryId,
+      acive: this.editItemData.active
+    });
   }
 
   ngOnInit(){
     this._categoryService.getCategoriesFromApi();
-
     const categoryData$ = this._categoryService.categories$;
-
-    
 
     categoryData$.pipe(
       map((categories: Category[]) =>
@@ -83,7 +66,7 @@ export class AddItemComponent {
       }) )
     ))
     .subscribe(data => {
-      this.categoryItem = data;
+      this.categoryData = data;
     });  
       
   }
@@ -97,7 +80,7 @@ export class AddItemComponent {
     if(this.addItemForm.valid){
       
       const newItem: Item = {
-        itemId: this.newData,
+        itemId: this.editItemData.itemId,
         categoryId: this.addItemForm.value.category,
         name: this.addItemForm.value.name,
         active: this.addItemForm.value.active
@@ -105,24 +88,22 @@ export class AddItemComponent {
       
       console.log(typeof(newItem.itemId), newItem.itemId);
       
-      if(newItem.itemId === 0){
+      if(this.isAdd === true){
         await this._itemService.addItemByApi(newItem);
         console.log("inside add ");
         
       }
       else{
         this._itemService.updateItemByApi(newItem);
-        console.log("inside update api");
+        this._itemService.updatedItem = {
+          categoryId: 0,
+          itemId: 0,
+          name: '',
+          active: false
+        };
+        console.log(this.editItemData);
         
-
-        this.editItemData.categoryId = 0;
-        this.editItemData.itemId = 0;
-        this.editItemData.name = '';
-        this.editItemData.active = false;
-
-        this.newData = 0;
-        this._itemService.updateData(this.newData.toString())
-        this._itemService.updateItemData(this.editItemData);
+        console.log("inside update api");
       }
 
       this.addItemForm.reset();
