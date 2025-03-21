@@ -1,27 +1,18 @@
 import { Component } from '@angular/core';
-<<<<<<< HEAD
-import { SaleService } from '../services/sale.service';
-import { ItemService } from '../services/item.service';
-import { combineLatest, map } from 'rxjs';
 import { Item } from '../model/item.type';
-import { NgFor } from '@angular/common';
+import { ItemService } from '../services/item.service';
+import { SaleService } from '../services/sale.service';
 import { Router } from '@angular/router';
+import { combineLatest, map } from 'rxjs';
 import { Sale } from '../model/sale.type';
 
 @Component({
   selector: 'app-sale',
-  imports: [NgFor],
-=======
-
-@Component({
-  selector: 'app-sale',
   imports: [],
->>>>>>> ec0d710 (feat(sale): added a new component for sales.)
   templateUrl: './sale.component.html',
   styleUrl: './sale.component.scss'
 })
 export class SaleComponent {
-<<<<<<< HEAD
   salesData: {
     itemName: string;
     salesId: number;
@@ -74,13 +65,7 @@ export class SaleComponent {
   }
 
   updateSalesRecord(sale: Sale){
-    const isEdit = true;
-    const saleId = sale['salesId'];
-    this.sendData(saleId.toString());
+    this.saleService.isAdd = false;
     this.router.navigate(['sales/update-sales']);
-  }
-
-  sendData(saleId: string) {
-    this.saleService.updateData(saleId);
   }
 }
