@@ -55,8 +55,8 @@ export class SaleComponent {
   }
 
   addNewSale(){
-    console.log("hello in the add new sale method of sale component");
-    
+    this.saleService.isAdd = true;
+    this.saleService.resetUpdatedSale();
     this.router.navigate(['sales/add-sales']);
   }
 
@@ -66,13 +66,8 @@ export class SaleComponent {
   }
 
   updateSalesRecord(sale: Sale){
-    const isEdit = true;
-    const saleId = sale['salesId'];
-    this.sendData(saleId.toString());
+    this.saleService.isAdd = false;
+    this.saleService.updateSaleData(sale);
     this.router.navigate(['sales/update-sales']);
-  }
-
-  sendData(saleId: string) {
-    this.saleService.updateData(saleId);
   }
 }

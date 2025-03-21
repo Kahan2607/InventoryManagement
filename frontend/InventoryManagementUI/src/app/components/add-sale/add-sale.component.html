@@ -4,7 +4,7 @@
         
         <label for="item">Item</label>
         <select formControlName="item" >
-            <option *ngFor="let item of itemSales" [value]="item.itemId">
+            <option *ngFor="let item of itemData" [value]="item.itemId">
                 {{ item.itemName }}
             </option>
         </select>

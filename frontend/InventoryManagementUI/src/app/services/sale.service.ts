@@ -8,11 +8,18 @@ import { AddSale } from '../model/addSale.type';
   providedIn: 'root'
 })
 export class SaleService {
+  isAdd = false;
+  updatedSale: Sale = {
+    salesId: 0,
+    itemId: 0,
+    quantity: 0,
+    price: 0,
+    salesAmount: 0,
+    salesDate: new Date(),
+    insertedDate: new Date()
+  };
   private saleSubject = new BehaviorSubject<Sale[]>([]);
   sales$ = this.saleSubject.asObservable();
-
-  private dataSource = new BehaviorSubject<string>('0');
-  currentData = this.dataSource.asObservable();
 
   constructor(private http: HttpClient) { 
 
@@ -49,7 +56,20 @@ export class SaleService {
       });
     }
 
-  updateData(data: string) {
-    this.dataSource.next(data);
+  updateSaleData(sale: Sale){
+    this.updatedSale = sale;
   }
+
+  resetUpdatedSale(){
+    this.updatedSale = {
+      salesId: 0,
+      itemId: 0,
+      quantity: 0,
+      price: 0,
+      salesAmount: 0,
+      salesDate: new Date(),
+      insertedDate: new Date()
+    };
+  }
+
 }
