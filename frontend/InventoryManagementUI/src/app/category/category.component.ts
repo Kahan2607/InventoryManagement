@@ -60,6 +60,7 @@ export class CategoryComponent {
     );
     console.log(this.filteredCategories);
     
+    
 
     // this.categoryService.getPaginatedCategoriesFromApi(this.currentPage, this.itemsPerPage)
     //   this.categoryService.categories$.subscribe({

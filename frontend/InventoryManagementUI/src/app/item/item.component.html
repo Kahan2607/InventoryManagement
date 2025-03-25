@@ -2,6 +2,12 @@
 
 <div class="container">
   <button (click)="addNewItem()">Add Item</button>
+  <label for="categoryStatus">Status:</label>
+  <select name="categoryStatus" (change)="filterCategories($event)">
+    <option value="all">ALL</option>
+    <option value="active">Active</option>
+    <option value="inactive">Inactive</option>
+  </select>
   <table class="item-list-table">
     <thead>
       <tr>
@@ -13,7 +19,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let item of itemsData">
+      <tr *ngFor="let item of filteredItemsData">
         <td>{{ item.itemId }}</td>
         <td>{{ item.categoryName }}</td>
         <td>{{ item.name }}</td>
@@ -25,4 +31,13 @@
       </tr>
     </tbody>
   </table>
+
+  <app-pagination
+    [currentPage]="currentPage"
+    [itemsPerPage]="itemsPerPage"
+    [totalItems]="totalItems"
+    (pageChanged)="onPageChange($event)"
+  ></app-pagination>
   </div>
+
+  

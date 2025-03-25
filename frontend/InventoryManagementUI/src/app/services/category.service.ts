@@ -14,13 +14,13 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class CategoryService {
   
 
-  status = 'all';
-  private categoriesSubject = new BehaviorSubject<Category[]>([]); // Holds category list
-  categories$ = this.categoriesSubject.asObservable(); // Expose as observable
-  
+    status = 'all';
+    private categoriesSubject = new BehaviorSubject<Category[]>([]); // Holds category list
+    categories$ = this.categoriesSubject.asObservable(); // Expose as observable
+    
 
-  private totalItemsSubject = new BehaviorSubject<number>(0);
-  totalItems$ = this.totalItemsSubject.asObservable();
+    private totalItemsSubject = new BehaviorSubject<number>(0);
+    totalItems$ = this.totalItemsSubject.asObservable();
 
   // private paginatedCategoriesSubject = new BehaviorSubject<PaginatedResponse<Category>>({
   //   categoryData: []
