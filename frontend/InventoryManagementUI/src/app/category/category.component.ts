@@ -2,11 +2,12 @@ import { Component } from '@angular/core';
 import { CategoryService } from '../services/category.service';
 import { Category } from '../model/category.type';
 import { NgFor } from '@angular/common';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DialogueBoxComponent } from '../components/dialogue-box/dialogue-box.component';
 import { FormsModule } from '@angular/forms';
 import { debounceTime, fromEvent, groupBy, map, switchMap, tap } from 'rxjs';
 import { PaginationComponent } from "../components/pagination/pagination.component";
+import { DeleteInfoMessageComponent } from '../components/delete-info-message/delete-info-message.component';
 
 @Component({
   selector: 'app-category',
@@ -15,6 +16,8 @@ import { PaginationComponent } from "../components/pagination/pagination.compone
   styleUrl: './category.component.scss'
 })
 export class CategoryComponent {
+  dialogRef?: MatDialogRef<DeleteInfoMessageComponent>;
+
   categories: Category[] = [];
   filteredCategories: Category[] = [];
   status = 'all';
@@ -76,6 +79,21 @@ export class CategoryComponent {
       data:{
         title: 'Add'
       }
+    });
+  }
+
+  confirmMessage(categoryId: Category['categoryId']){
+    this.dialogRef = this.dialog.open(DeleteInfoMessageComponent, {
+      disableClose: false
+    });
+    this.dialogRef.componentInstance.confirmMessage = "Are you sure you want to delete?"
+
+    this.dialogRef.afterClosed().subscribe(result => {
+      if(result) {
+        // do confirmation actions
+        this.deleteCategory(categoryId);
+      }
+      this.dialogRef = undefined;
     });
   }
 
