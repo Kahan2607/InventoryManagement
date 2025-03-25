@@ -55,6 +55,7 @@ export class DialogueBoxComponent implements OnInit {
       }
       if(this.inputData.title === 'Edit'){
         this._categoryService.editAndUpdateCategory(newCategory);
+        // this._categoryService.getPaginatedCategoriesFromApi(this._categoryService.page, 10);
       }
 
       this.addCategoryForm.reset();

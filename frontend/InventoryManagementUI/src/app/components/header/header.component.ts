@@ -17,6 +17,8 @@ export class HeaderComponent {
   }
 
   showCategories(){
+    console.log("In the categories routing");
+    
     this.router.navigate(['/categories']);
   }
 

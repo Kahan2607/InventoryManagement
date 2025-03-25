@@ -6,38 +6,69 @@ import { MatDialog } from '@angular/material/dialog';
 import { DialogueBoxComponent } from '../components/dialogue-box/dialogue-box.component';
 import { FormsModule } from '@angular/forms';
 import { groupBy, map } from 'rxjs';
-import { B } from '@angular/cdk/keycodes';
+import { PaginationComponent } from "../components/pagination/pagination.component";
 
 @Component({
   selector: 'app-category',
-  imports: [NgFor, FormsModule],
+  imports: [NgFor, FormsModule, PaginationComponent],
   templateUrl: './category.component.html',
   styleUrl: './category.component.scss'
 })
 export class CategoryComponent {
   categories: Category[] = [];
   filteredCategories: Category[] = [];
+  status = 'all';
+
+  paginatedData: Category[] = [];
+  currentPage: number = 1;
+  itemsPerPage: number = 10;
+  totalItems!: number;
   constructor(private categoryService: CategoryService, public dialog: MatDialog){
   }
 
-  isDescendingId: boolean = false;
-  isDescendingName: boolean = false;
-  // isActive: boolean = false;
+  isAscendingId: boolean = false;
+  isAscendingName: boolean = false;
 
   ngOnInit(): void {
-    
-    this.categoryService.getCategoriesFromApi();
-    this.categoryService.categories$.subscribe(
-      (data) => {
-        this.categories = data;
-        this.filteredCategories = [...this.categories];
-      }
+    // this.categoryService.getCategoriesFromApi();
+      // this.categoryService.categories$.subscribe(
+      //   (data) => {
+      //     this.categories = data;
+      //     this.filteredCategories = [...this.categories];
+      //   }
+      // );
+      // this.filteredCategories = this.categories;
+    this.categoryService.getCategoriesCount().subscribe(
+      (data) => this.totalItems = data
+    ); 
+    this.categoryService.getPaginatedCategoriesFromApi(this.currentPage, this.itemsPerPage, this.status);
+      this.categoryService.categories$.subscribe(
+        (data) => {
+          this.categories = data;
+          this.filteredCategories = [...this.categories];
+        }
     );
+    console.log(this.filteredCategories);
+    
+
+    // this.categoryService.getPaginatedCategoriesFromApi(this.currentPage, this.itemsPerPage)
+    //   this.categoryService.categories$.subscribe({
+    //   next: (response) => {
+    //     console.log(response.categoryData, response.totalItems);
+        
+    //     this.filteredCategories = response.categoryData;
+    //     this.totalItems = response.totalItems;
+    //   },
+    //   error: (error) => {
+    //     console.log("Error getting paginated data from categories api call.");
+    //   }
+    // });
+
+    // this.fetchData();
   }
 
-  
-
   openDialog(): void {
+    this.setData(this.currentPage, this.status);
     const dialogRef = this.dialog.open(DialogueBoxComponent, {
       width: '50%',
       enterAnimationDuration: '500ms',
@@ -49,8 +80,8 @@ export class CategoryComponent {
   }
 
   update(category: Category){
-    
-    const dialogRef = this.dialog.open(DialogueBoxComponent, {
+    this.setData(this.currentPage, this.status);
+    const dialogRef = this.dialog.open(DialogueBoxComponent, {  
       width: '50%',
       enterAnimationDuration: '500ms',
       exitAnimationDuration: '500ms',
@@ -61,25 +92,26 @@ export class CategoryComponent {
         active: false,
       }
     });
+    // this.categoryService.page = this.currentPage;
   }
 
   deleteCategory(categoryId: Category['categoryId']){
-    
+    this.setData(this.currentPage, this.status);
     this.categoryService.deleteACategory(categoryId);
   }
 
 
   sortByCategoryId(){
-    this.isDescendingId =  !this.isDescendingId;
-    this.categories.sort((a,b) => 
-      this.isDescendingId ? b.categoryId - a.categoryId: a.categoryId - b.categoryId
+    this.isAscendingId =  !this.isAscendingId;
+    this.filteredCategories.sort((a,b) => 
+      this.isAscendingId ? b.categoryId - a.categoryId: a.categoryId - b.categoryId
     );
   }
 
   sortByCategoryName(){
-    this.isDescendingName = !this.isDescendingName;
-    this.categories.sort((a,b) => 
-      this.isDescendingName ? b.name.localeCompare(a.name): a.name.localeCompare(b.name) 
+    this.isAscendingName = !this.isAscendingName;
+    this.filteredCategories.sort((a,b) => 
+      this.isAscendingName ? b.name.localeCompare(a.name): a.name.localeCompare(b.name) 
     );
   }
 
@@ -87,11 +119,74 @@ export class CategoryComponent {
     const selectedValue = (event.target as HTMLSelectElement).value;
     
     if (selectedValue === 'all'){
-      this.filteredCategories = this.categories;
+      this.status = 'all';
+      this.categoryService.getPaginatedCategoriesFromApi(this.currentPage, this.itemsPerPage, this.status);
+      this.categoryService.categories$.subscribe(
+        (data) => {
+          this.categories = data;
+          this.filteredCategories = [...this.categories];
+        }
+      );
+      // this.filteredCategories = this.categories;
+      // this.fetchData();
     }else if (selectedValue === 'active') {
-      this.filteredCategories = this.categories.filter(category => category.active);
+      this.status = 'active'
+      this.categoryService.getPaginatedCategoriesFromApi(this.currentPage, this.itemsPerPage, 'active');
+      this.categoryService.categories$.subscribe(
+        (data) => {
+          this.categories = data;
+          this.filteredCategories = [...this.categories];
+        }
+      );
+    
     }else if (selectedValue === 'inactive') {
-      this.filteredCategories = this.categories.filter(category => !category.active);
+      this.status = 'inactive';
+      this.categoryService.getPaginatedCategoriesFromApi(this.currentPage, this.itemsPerPage, this.status);
+      this.categoryService.categories$.subscribe(
+        (data) => {
+          this.categories = data;
+          this.filteredCategories = [...this.categories];
+        }
+      );
     }
+  }
+
+  // fetchData(): void {
+  //   this.categoryService.getPaginatedCategoriesFromApi(this.currentPage, this.itemsPerPage).subscribe({
+  //     next: (response) => {
+  //       console.log(response.categoryData, response.totalItems);
+        
+  //       this.filteredCategories = response.categoryData;
+  //       this.totalItems = response.totalItems;
+  //     },
+  //     error: (error) => {
+  //       console.log("Error getting paginated data from categories api call.");
+  //     }
+  //   });
+  // }
+
+
+  onPageChange(page: number): void {
+    this.currentPage = page;
+    // this.fetchData();
+
+    
+    this.categoryService.getPaginatedCategoriesFromApi(this.currentPage, this.itemsPerPage, this.status);
+    this.categoryService.categories$.subscribe(
+      (data) => {
+        this.categories = data;
+        this.filteredCategories = [...this.categories];
+      }
+    );
+  }
+
+  ngOnDestroy(){
+    console.log("category componente getting destroyed.");
+    
+  }
+
+  setData(page: number, status: string){
+    this.categoryService.page = this.currentPage;
+    this.categoryService.status = status;
   }
 }
