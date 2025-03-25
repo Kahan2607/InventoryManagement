@@ -5,7 +5,7 @@ import { NgFor } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogueBoxComponent } from '../components/dialogue-box/dialogue-box.component';
 import { FormsModule } from '@angular/forms';
-import { groupBy, map } from 'rxjs';
+import { debounceTime, fromEvent, groupBy, map, switchMap, tap } from 'rxjs';
 import { PaginationComponent } from "../components/pagination/pagination.component";
 
 @Component({
@@ -188,5 +188,32 @@ export class CategoryComponent {
   setData(page: number, status: string){
     this.categoryService.page = this.currentPage;
     this.categoryService.status = status;
+  }
+
+  fetchResults(event: Event){
+    // this.setData(this.currentPage, this.status);
+    const inputSearchElement = document.getElementById('search-results') as HTMLInputElement;
+    console.log(inputSearchElement.value);
+    
+    const searchInput$ = fromEvent(inputSearchElement, 'input').pipe(
+                        debounceTime(300),
+                        map((event: Event) => (event.target as HTMLInputElement).value),
+                        tap(() => {
+                          this.categoryService.getPaginatedCategoriesFromApi(this.currentPage, this.itemsPerPage, this.status);
+                        }),
+                        switchMap(searchText => 
+                          this.categoryService.categories$.pipe(
+                            map(categories => categories.filter(category => 
+                              category.name.toLowerCase().includes(searchText.toLowerCase())
+                            ))
+                          )
+                        )
+                      ).subscribe(
+                        (data) => {
+                          this.categories = data;
+                          this.filteredCategories = [...this.categories];
+                        }
+                      )
+                                                        
   }
 }

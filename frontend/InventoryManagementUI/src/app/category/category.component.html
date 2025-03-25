@@ -3,6 +3,7 @@
   
     
   <button (click)="openDialog()">Add Category</button>
+  <input id="search-results" (input)="fetchResults($event)">
   <label for="categoryStatus">Status:</label>
   <select name="categoryStatus" (change)="filterCategories($event)">
     <option value="all">ALL</option>
