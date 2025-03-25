@@ -18,17 +18,22 @@ export class CategoryService {
   private categoriesSubject = new BehaviorSubject<Category[]>([]); // Holds category list
   categories$ = this.categoriesSubject.asObservable(); // Expose as observable
   
+
+  private totalItemsSubject = new BehaviorSubject<number>(0);
+  totalItems$ = this.totalItemsSubject.asObservable();
+
   // private paginatedCategoriesSubject = new BehaviorSubject<PaginatedResponse<Category>>({
   //   categoryData: []
   // });
   // paginatedCategories$ = this.paginatedCategoriesSubject.asObservable();
   
 
-  private activeCategoriesSubject = new BehaviorSubject<Category[]>([]); // Holds category list
-  activeCategories$ = this.activeCategoriesSubject.asObservable(); // Expose as observable
+  // private activeCategoriesSubject = new BehaviorSubject<Category[]>([]); // Holds category list
+  // activeCategories$ = this.activeCategoriesSubject.asObservable(); // Expose as observable
   
   page = 1;
   itemPerPage = 10;
+  totalItems = 0;
 
   constructor(private http: HttpClient) { 
     
@@ -43,12 +48,17 @@ export class CategoryService {
     const url = `https://localhost:5034/api/category/${page}/${itemsPerPage}`;
     const params = new HttpParams()
                         .set('page', page.toString())
-                        .set('itemPerPage', itemsPerPage.toString())
+                        .set('itemsPerPage', itemsPerPage.toString())
                         .set('status', status);
     console.log("insdie category service");
     
-    this.http.get<Category[]>(url, { params }).subscribe({
-      next: data => this.categoriesSubject.next(data),
+    this.http.get<{categoryData: Category[], totalItems: number}>(url, { params }).subscribe({
+      next: response => {
+        this.categoriesSubject.next(response.categoryData); // Update category data
+        console.log(response.categoryData);
+        
+        this.totalItemsSubject.next(response.totalItems);   // Update total items count
+      },
       error: error => console.log("Error fetching the data", error)
     });
   }
@@ -60,6 +70,11 @@ export class CategoryService {
       next: data => this.categoriesSubject.next(data),
       error: error => console.log("Error fetching the data", error)
     });
+  }
+
+  getAllCategoriesFromApi(): Observable<Category[]>{
+    const url = 'https://localhost:5034/api/category';
+    return this.http.get<Category[]>(url);
   }
 
   getActiveCategoriesFromApi(): Observable<Category[]>{
@@ -77,6 +92,12 @@ export class CategoryService {
     const url = 'https://localhost:5034/api/category/add-category';
     this.http.post(url, category).subscribe(() => {
       // this.getCategoriesFromApi();
+      
+      // this.getCategoriesCount().subscribe(
+      //   (data) => this.totalItems = data
+      // );
+      // this.getTotalItems(this.totalItems);
+
       this.getPaginatedCategoriesFromApi(this.page, this.itemPerPage, this.status);
     });
   }
@@ -96,6 +117,10 @@ export class CategoryService {
       // this.getCategoriesFromApi();
       this.getPaginatedCategoriesFromApi(this.page, this.itemPerPage, this.status);
     } );
+  }
+
+  getTotalItems(totalItems: number){
+    const data = totalItems;
   }
 
   

@@ -16,6 +16,7 @@ import { CategoryService } from '../../services/category.service';
 export class DialogueBoxComponent implements OnInit {
   inputData: any;
   addCategoryForm: FormGroup;
+  
   constructor(
     @Inject(MAT_DIALOG_DATA) public data:any,
     private _dialogRef: MatDialogRef<DialogueBoxComponent>,
@@ -52,9 +53,12 @@ export class DialogueBoxComponent implements OnInit {
 
       if(this.inputData.title === 'Add'){
         this._categoryService.addCategoryByApi(newCategory);
+
+
       }
       if(this.inputData.title === 'Edit'){
         this._categoryService.editAndUpdateCategory(newCategory);
+
         // this._categoryService.getPaginatedCategoriesFromApi(this._categoryService.page, 10);
       }
 

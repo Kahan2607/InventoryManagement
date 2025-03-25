@@ -30,10 +30,23 @@ export class ItemComponent {
 
   ngOnInit(): void{
     this.itemService.getItemsFromApi();
-    this.categoryService.getCategoriesFromApi();
+    const categoryData$ = this.categoryService.getAllCategoriesFromApi();
+    console.log(categoryData$, "This is inside categoryData");
+    
 
     
-    combineLatest([this.itemService.items$, this.categoryService.categories$]).pipe(
+    // combineLatest([this.itemService.items$, this.categoryService.categories$]).pipe(
+    //   map(([items, categories]) =>
+    //     items.map(item => ({
+    //       ...item,
+    //       categoryName: categories.find(category => category.categoryId === item.categoryId)?.name || 'Unknown'
+        
+    //     }))
+    //   )
+    // ).subscribe(data => {
+    //   this.itemsData = data;
+    // });
+    combineLatest([this.itemService.items$, categoryData$]).pipe(
       map(([items, categories]) =>
         items.map(item => ({
           ...item,

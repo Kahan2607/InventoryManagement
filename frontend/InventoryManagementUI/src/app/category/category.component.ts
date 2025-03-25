@@ -45,11 +45,18 @@ export class CategoryComponent {
       (data) => this.totalItems = data
     ); 
     this.categoryService.getPaginatedCategoriesFromApi(this.currentPage, this.itemsPerPage, this.status);
-      this.categoryService.categories$.subscribe(
-        (data) => {
-          this.categories = data;
-          this.filteredCategories = [...this.categories];
-        }
+    this.categoryService.categories$.subscribe(
+      (data) => {
+        this.categories = data;
+        console.log(this.categories);
+        
+        this.filteredCategories = [...this.categories];
+      }
+    );
+    this.categoryService.totalItems$.subscribe(
+      total => {
+        this.totalItems = total;
+      }
     );
     console.log(this.filteredCategories);
     
@@ -80,6 +87,7 @@ export class CategoryComponent {
         title: 'Add'
       }
     });
+    
   }
 
   confirmMessage(categoryId: Category['categoryId']){
@@ -124,6 +132,7 @@ export class CategoryComponent {
     this.filteredCategories.sort((a,b) => 
       this.isAscendingId ? b.categoryId - a.categoryId: a.categoryId - b.categoryId
     );
+    
   }
 
   sortByCategoryName(){
@@ -213,7 +222,7 @@ export class CategoryComponent {
     const inputSearchElement = document.getElementById('search-results') as HTMLInputElement;
     console.log(inputSearchElement.value);
     
-    const searchInput$ = fromEvent(inputSearchElement, 'input').pipe(
+    fromEvent(inputSearchElement, 'input').pipe(
                         debounceTime(300),
                         map((event: Event) => (event.target as HTMLInputElement).value),
                         tap(() => {
