@@ -1,16 +1,27 @@
 import { Component } from '@angular/core';
 import { SaleService } from '../services/sale.service';
 import { ItemService } from '../services/item.service';
-import { combineLatest, map } from 'rxjs';
+import {
+  combineLatest,
+  debounceTime,
+  filter,
+  find,
+  map,
+  mergeAll,
+  min,
+  pipe,
+  switchMap,
+} from 'rxjs';
 import { Item } from '../model/item.type';
 import { NgFor } from '@angular/common';
 import { Router } from '@angular/router';
 import { Sale } from '../model/sale.type';
 import { PaginationComponent } from '../components/pagination/pagination.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-sale',
-  imports: [NgFor, PaginationComponent],
+  imports: [NgFor, PaginationComponent, FormsModule],
   templateUrl: './sale.component.html',
   styleUrl: './sale.component.scss',
 })
@@ -55,6 +66,8 @@ export class SaleComponent {
   currentPage: number = 1;
   itemsPerPage: number = 10;
   totalItems!: number;
+  startingDate = new Date();
+  endingDate = new Date();
   ngOnInit() {
     // this.itemService.getItemsFromApi();
     // this.saleService.getAllSalesDetailsFromApi();
@@ -104,6 +117,8 @@ export class SaleComponent {
         this.salesData = data;
         this.filteredSalesData = [...this.salesData];
       });
+
+    this.currentPage = this.saleService.page;
   }
 
   addNewSale() {
@@ -161,4 +176,44 @@ export class SaleComponent {
     // this.currentPage = page;
     this.saleService.page = page;
   }
+
+  fetchDataBetweenDates(event: Event) {
+    // this.setData(this.currentPage);
+    const salesDataBetweenDatesButton = document.getElementById(
+      'fetch-data-between-dates'
+    );
+
+    const itemData$ = this.itemService.getItemsFromApi();
+
+    this.saleService.getPaginatedSalesRecordFromApi(this.currentPage, 10);
+    const filteredSalesData$ = this.saleService.sales$.pipe(
+      map((sales) => {
+        return sales.filter(
+          (sale) =>
+            sale.salesDate >= this.startingDate &&
+            sale.salesDate <= this.endingDate
+        );
+      })
+    );
+
+    const tempSalesData$ = combineLatest([filteredSalesData$, itemData$])
+      .pipe(
+        map(([sales, items]) =>
+          sales.map((sale) => ({
+            ...sale,
+            itemName:
+              items.find((item) => item.itemId == sale.itemId)?.name ||
+              'Unknown',
+          }))
+        )
+      )
+      .subscribe((data) => {
+        this.salesData = data;
+        this.filteredSalesData = [...this.salesData];
+      });
+  }
+
+  // ngOnDestroy() {
+  //   console.log('sale component destroyed.');
+  // }
 }

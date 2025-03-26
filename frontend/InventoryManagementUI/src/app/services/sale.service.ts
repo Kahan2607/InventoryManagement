@@ -58,12 +58,9 @@ export class SaleService {
       });
   }
 
-  getAllSalesDetailsFromApi() {
+  getAllSalesDetailsFromApi(): Observable<Sale[]> {
     const url = 'https://localhost:5034/api/sale';
-    this.http.get<Sale[]>(url).subscribe({
-      next: (data) => this.saleSubject.next(data),
-      error: (error) => console.log(error),
-    });
+    return this.http.get<Sale[]>(url);
   }
 
   addNewSalesRecord(sale: AddSale) {
