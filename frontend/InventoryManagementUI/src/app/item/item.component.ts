@@ -4,15 +4,24 @@ import { ItemService } from '../services/item.service';
 import { NgFor } from '@angular/common';
 import { CategoryService } from '../services/category.service';
 import { Category } from '../model/category.type';
-import { combineLatest, forkJoin, map, switchMap } from 'rxjs';
+import {
+  combineLatest,
+  debounceTime,
+  forkJoin,
+  fromEvent,
+  map,
+  switchMap,
+  tap,
+} from 'rxjs';
 import { Router } from '@angular/router';
-import { PaginationComponent } from "../components/pagination/pagination.component";
+import { PaginationComponent } from '../components/pagination/pagination.component';
+import { Target } from '@angular/compiler';
 
 @Component({
   selector: 'app-item',
   imports: [NgFor, PaginationComponent],
   templateUrl: './item.component.html',
-  styleUrl: './item.component.scss'
+  styleUrl: './item.component.scss',
 })
 export class ItemComponent {
   tempItemData: {
@@ -45,20 +54,20 @@ export class ItemComponent {
 
   categories: Category[] = [];
   constructor(
-    private itemService: ItemService, 
+    private itemService: ItemService,
     private categoryService: CategoryService,
     private router: Router
-  ){}
+  ) {}
 
-  ngOnInit(): void{
+  ngOnInit(): void {
     // this.itemService.getItemsFromApi();
-    
+
     // combineLatest([this.itemService.items$, this.categoryService.categories$]).pipe(
     //   map(([items, categories]) =>
     //     items.map(item => ({
     //       ...item,
     //       categoryName: categories.find(category => category.categoryId === item.categoryId)?.name || 'Unknown'
-        
+
     //     }))
     //   )
     // ).subscribe(data => {
@@ -66,46 +75,48 @@ export class ItemComponent {
     // });
     // this.itemService.getItemsCount().subscribe(
     //   (data) => this.totalItems = data
-    // ); 
+    // );
 
     const categoryData$ = this.categoryService.getAllCategoriesFromApi();
-    console.log(categoryData$, "This is inside categoryData");
-    
+    console.log(categoryData$, 'This is inside categoryData');
 
     this.currentPage = 1;
 
-    this.itemService.getPaginatedItemsFromApi(this.currentPage, this.itemsPerPage, this.status);
-    this.itemService.items$.subscribe(
-      (data) => {
-        this.tempItemData = data;
-      }
-      );
-      this.itemService.totalItems$.subscribe(
-        total => {
-          this.totalItems = total;
-        }
+    this.itemService.getPaginatedItemsFromApi(
+      this.currentPage,
+      this.itemsPerPage,
+      this.status
     );
-
-
-    combineLatest([this.itemService.items$, categoryData$]).pipe(
-      map(([items, categories]) =>
-        items.map(item => ({
-          ...item,
-          categoryName: categories.find(category => category.categoryId === item.categoryId)?.name || 'Unknown'
-        
-        }))
-      )
-    ).subscribe(data => {
-      this.itemsData = data;
-      this.filteredItemsData = [...this.itemsData];
+    this.itemService.items$.subscribe((data) => {
+      this.tempItemData = data;
     });
+    this.itemService.totalItems$.subscribe((total) => {
+      this.totalItems = total;
+    });
+
+    combineLatest([this.itemService.items$, categoryData$])
+      .pipe(
+        map(([items, categories]) =>
+          items.map((item) => ({
+            ...item,
+            categoryName:
+              categories.find(
+                (category) => category.categoryId === item.categoryId
+              )?.name || 'Unknown',
+          }))
+        )
+      )
+      .subscribe((data) => {
+        this.itemsData = data;
+        this.filteredItemsData = [...this.itemsData];
+      });
 
     // this.setData(this.currentPage, this.status);
   }
 
-  addNewItem(){
-    console.log("Inside the addNewItem method ", this.status);
-    
+  addNewItem() {
+    console.log('Inside the addNewItem method ', this.status);
+
     // this.setData(this.currentPage, this.status);
 
     this.itemService.isAdd = true;
@@ -113,102 +124,156 @@ export class ItemComponent {
     this.router.navigate(['/items/add-item']);
   }
 
-  deleteItem(itemID: Item['itemId']){
+  deleteItem(itemID: Item['itemId']) {
     this.setData(this.currentPage, this.status);
     this.itemService.deleteItem(itemID);
   }
 
-  updateItem(item: Item){
+  updateItem(item: Item) {
     this.itemService.isAdd = false;
     // this.setData(this.currentPage, this.status);
     this.itemService.updateItemData(item);
     this.router.navigate(['items/update-item']);
   }
 
-  filterCategories(event: Event){
+  filterCategories(event: Event) {
     const selectedValue = (event.target as HTMLSelectElement).value;
-    
+
     this.status = selectedValue;
     console.log(selectedValue);
-    
+
     const categoryData$ = this.categoryService.getAllCategoriesFromApi();
-    console.log(categoryData$, "This is inside categoryData");
-    this.itemService.getPaginatedItemsFromApi(this.currentPage, this.itemsPerPage, this.status);
+    console.log(categoryData$, 'This is inside categoryData');
+    this.itemService.getPaginatedItemsFromApi(
+      this.currentPage,
+      this.itemsPerPage,
+      this.status
+    );
     // this.categoryService.categories$.subscribe(
     //   (data) => {
     //     this.categories = data;
     //     this.filteredCategories = [...this.categories];
     //   }
     // );
-    this.itemService.items$.subscribe(
-      (data) => {
-        this.tempItemData = data;
-      }
-      );
-      this.itemService.totalItems$.subscribe(
-        total => {
-          this.totalItems = total;
-        }
-    );
-
-
-    combineLatest([this.itemService.items$, categoryData$]).pipe(
-      map(([items, categories]) =>
-        items.map(item => ({
-          ...item,
-          categoryName: categories.find(category => category.categoryId === item.categoryId)?.name || 'Unknown'
-        }))
-      )
-    ).subscribe(data => {
-      this.itemsData = data;
-      this.filteredItemsData = [...this.itemsData];
+    this.itemService.items$.subscribe((data) => {
+      this.tempItemData = data;
+    });
+    this.itemService.totalItems$.subscribe((total) => {
+      this.totalItems = total;
     });
 
+    combineLatest([this.itemService.items$, categoryData$])
+      .pipe(
+        map(([items, categories]) =>
+          items.map((item) => ({
+            ...item,
+            categoryName:
+              categories.find(
+                (category) => category.categoryId === item.categoryId
+              )?.name || 'Unknown',
+          }))
+        )
+      )
+      .subscribe((data) => {
+        this.itemsData = data;
+        this.filteredItemsData = [...this.itemsData];
+      });
   }
-  
 
-  onPageChange(page: number){
+  onPageChange(page: number) {
     this.currentPage = page;
     // this.fetchData();
 
-    
-    this.itemService.getItemsCount().subscribe(
-      (data) => this.totalItems = data
-    ); 
-    this.itemService.getPaginatedItemsFromApi(this.currentPage, this.itemsPerPage, this.status);
-    this.itemService.items$.subscribe(
-      (data) => {
-        this.tempItemData = data;
-      }
+    this.itemService
+      .getItemsCount()
+      .subscribe((data) => (this.totalItems = data));
+    this.itemService.getPaginatedItemsFromApi(
+      this.currentPage,
+      this.itemsPerPage,
+      this.status
     );
-    this.itemService.totalItems$.subscribe(
-      total => {
-        this.totalItems = total;
-      }
-    );
-    const categoryData$ = this.categoryService.getAllCategoriesFromApi();
-    console.log(categoryData$, "This is inside categoryData");
-
-    combineLatest([this.itemService.items$, categoryData$]).pipe(
-      map(([items, categories]) =>
-        items.map(item => ({
-          ...item,
-          categoryName: categories.find(category => category.categoryId === item.categoryId)?.name || 'Unknown'
-        
-        }))
-      )
-    ).subscribe(data => {
-      this.itemsData = data;
-      this.filteredItemsData = [...this.itemsData];
+    this.itemService.items$.subscribe((data) => {
+      this.tempItemData = data;
     });
+    this.itemService.totalItems$.subscribe((total) => {
+      this.totalItems = total;
+    });
+    const categoryData$ = this.categoryService.getAllCategoriesFromApi();
+    console.log(categoryData$, 'This is inside categoryData');
+
+    combineLatest([this.itemService.items$, categoryData$])
+      .pipe(
+        map(([items, categories]) =>
+          items.map((item) => ({
+            ...item,
+            categoryName:
+              categories.find(
+                (category) => category.categoryId === item.categoryId
+              )?.name || 'Unknown',
+          }))
+        )
+      )
+      .subscribe((data) => {
+        this.itemsData = data;
+        this.filteredItemsData = [...this.itemsData];
+      });
   }
 
-  setData(page: number, status: string){
+  setData(page: number, status: string) {
     this.status = status;
     this.currentPage = page;
     this.itemService.page = page;
     this.itemService.status = status;
-    console.log("Inside the setData method ",status);
-    
+    console.log('Inside the setData method ', status);
+  }
+
+  fetchResults(event: Event) {
+    const inputSearchElement = document.getElementById(
+      'search-items'
+    ) as HTMLInputElement;
+    console.log('User typed: ', inputSearchElement.value);
+
+    const categoryData$ = this.categoryService.getAllCategoriesFromApi();
+
+    fromEvent(inputSearchElement, 'input')
+      .pipe(
+        debounceTime(300),
+        map((event: Event) => (event.target as HTMLInputElement).value),
+        tap(() => {
+          this.itemService.getPaginatedItemsFromApi(
+            this.currentPage,
+            this.itemsPerPage,
+            this.status
+          );
+        }),
+        switchMap((searchText) =>
+          combineLatest([
+            this.itemService.items$.pipe(
+              map((items) =>
+                items.filter((item) =>
+                  item.name.toLowerCase().includes(searchText.toLowerCase())
+                )
+              )
+            ),
+
+            categoryData$,
+          ]).pipe(
+            map(([filteredItems, categories]) =>
+              filteredItems.map((item) => ({
+                ...item,
+                categoryName:
+                  categories.find(
+                    (category) => category.categoryId === item.categoryId
+                  )?.name || 'Unknown',
+              }))
+            )
+          )
+        )
+      )
+      .subscribe((data) => {
+        this.itemsData = data;
+        this.filteredItemsData = [...this.itemsData];
+        console.log(this.filteredItemsData);
+      });
   }
 }
