@@ -24,7 +24,7 @@ export class ItemService {
   totalItems = 0;
 
   status = 'all';
-  private itemsSubject = new BehaviorSubject<Item[]>([]); // Holds category list
+  private itemsSubject = new BehaviorSubject<Item[]>([]); // items behaviour subject list which will store the data throughout the flow 
   items$ = this.itemsSubject.asObservable(); // Expose as observable
   
 
@@ -88,14 +88,18 @@ export class ItemService {
   deleteItem(itemId: Item['itemId']){
     const url = `https://localhost:5034/api/item/delete-item${itemId}`;
     this.http.delete(url).subscribe(() => {
-      this.getItemsFromApi();
+      this.getPaginatedItemsFromApi(this.page, 10, this.status);
     });
   }
 
   updateItemByApi(item: Item){
     const url = `https://localhost:5034/api/item/update-item${item.itemId}`;
+    console.log("Inside updataItemByAPi", this.page);
+    
     this.http.put(url, item).subscribe(() =>{
-      this.getItemsFromApi();
+      console.log("inside update items page", this.page);
+      
+      this.getPaginatedItemsFromApi(this.page, 10, this.status);
     });
   }
 
@@ -111,8 +115,4 @@ export class ItemService {
       name: ''
     };
   }
-
-  // getCategoryNameInTheData(){
-    
-  // }
 }

@@ -99,17 +99,17 @@ export class ItemComponent {
       this.itemsData = data;
       this.filteredItemsData = [...this.itemsData];
     });
+
+    // this.setData(this.currentPage, this.status);
   }
 
   addNewItem(){
     console.log("Inside the addNewItem method ", this.status);
     
-    this.setData(this.currentPage, this.status);
+    // this.setData(this.currentPage, this.status);
 
     this.itemService.isAdd = true;
-    // console.log("add-item");
     this.itemService.resetUpdatedItem();
-    // this.itemService.sendPageData();
     this.router.navigate(['/items/add-item']);
   }
 
@@ -120,6 +120,7 @@ export class ItemComponent {
 
   updateItem(item: Item){
     this.itemService.isAdd = false;
+    // this.setData(this.currentPage, this.status);
     this.itemService.updateItemData(item);
     this.router.navigate(['items/update-item']);
   }
@@ -203,6 +204,8 @@ export class ItemComponent {
   }
 
   setData(page: number, status: string){
+    this.status = status;
+    this.currentPage = page;
     this.itemService.page = page;
     this.itemService.status = status;
     console.log("Inside the setData method ",status);
