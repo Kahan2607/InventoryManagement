@@ -58,12 +58,13 @@ export class ItemService {
       });
   }
 
-  getItemsFromApi() {
+  getItemsFromApi(): Observable<Item[]> {
     const url = 'https://localhost:5034/api/item';
-    this.http.get<Item[]>(url).subscribe({
-      next: (data) => this.itemsSubject.next(data),
-      error: (error) => console.log(error),
-    });
+    // this.http.get<Item[]>(url).subscribe({
+    //   next: (data) => this.itemsSubject.next(data),
+    //   error: (error) => console.log(error),
+    // });
+    return this.http.get<Item[]>(url);
   }
 
   addItemByApi(item: Item): Promise<void> {

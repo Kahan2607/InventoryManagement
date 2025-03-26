@@ -1,47 +1,79 @@
 <div class="container">
-    <form [formGroup]="addSaleForm">
-        <!-- <input type="hidden" [value]="categoryItem[0].isEdit"> -->
-        
-        <label for="item">Item</label>
-        <select formControlName="item" >
-            <option *ngFor="let item of itemData" [value]="item.itemId">
-                {{ item.itemName }}
-            </option>
-        </select>
-        <div *ngIf="addSaleForm.get('item')?.invalid && addSaleForm.get('name')?.touched" class="validation-warning">
-            'Item' is required
-        </div>
+  <form [formGroup]="addSaleForm">
+    <!-- <input type="hidden" [value]="categoryItem[0].isEdit"> -->
 
-        
-        
-        <label for="quantity">Quantity</label>
-        <input type="number" formControlName="quantity" placeholder="Enter the quantity">
-        <div *ngIf="addSaleForm.get('quantity')?.invalid && addSaleForm.get('quantity')?.touched" class="validation-warning">
-            'Quantity' is required
-        </div>
+    <label for="item">Item</label>
+    <select formControlName="item">
+      <option *ngFor="let item of itemData" [value]="item.itemId">
+        {{ item.itemName }}
+      </option>
+    </select>
+    <div
+      *ngIf="
+        addSaleForm.get('item')?.invalid && addSaleForm.get('name')?.touched
+      "
+      class="validation-warning"
+    >
+      'Item' is required
+    </div>
 
+    <label for="quantity">Quantity</label>
+    <input
+      type="number"
+      formControlName="quantity"
+      placeholder="Enter the quantity"
+    />
+    <div
+      *ngIf="
+        addSaleForm.get('quantity')?.invalid &&
+        addSaleForm.get('quantity')?.touched
+      "
+      class="validation-warning"
+    >
+      'Quantity' is required
+    </div>
 
-        <label for="price">Price</label>
-        <input type="number" formControlName="price" placeholder="Enter the price">
-        <div *ngIf="addSaleForm.get('price')?.invalid && addSaleForm.get('price')?.touched" class="validation-warning">
-            'Price' is required
-        </div>
+    <label for="price">Price</label>
+    <input
+      type="number"
+      formControlName="price"
+      placeholder="Enter the price"
+    />
+    <div
+      *ngIf="
+        addSaleForm.get('price')?.invalid && addSaleForm.get('price')?.touched
+      "
+      class="validation-warning"
+    >
+      'Price' is required
+    </div>
 
+    <label for="salesDate">SalesDate</label>
+    <input
+      type="datetime-local"
+      formControlName="salesDate"
+      placeholder="Enter the SalesDate"
+    />
+    <div
+      *ngIf="
+        addSaleForm.get('salesDate')?.invalid &&
+        addSaleForm.get('salesDate')?.touched
+      "
+      class="validation-warning"
+    >
+      'SalesDate' is required
+    </div>
 
-        <label for="salesDate">SalesDate</label>
-        <input type="datetime-local" formControlName="salesDate" placeholder="Enter the SalesDate">
-        <div *ngIf="addSaleForm.get('salesDate')?.invalid && addSaleForm.get('salesDate')?.touched" class="validation-warning">
-            'SalesDate' is required
-        </div>
-        
-        <!-- <label for="insertedDate">InsertedDate</label>
+    <!-- <label for="insertedDate">InsertedDate</label>
         <input type="date" formControlName="insertedDate" placeholder="Enter the InsertedDate">
         <div *ngIf="addSaleForm.get('salesDate')?.invalid && addSaleForm.get('salesDate')?.touched" class="validation-warning">
             'SalesDate' is required
         </div> -->
 
-        <!-- <div *ngIf="addItemForm.get('active')?.invalid && addItemForm.get('active')?.touched" class="validation-warning"></div> -->
-        
-        <button type="submit" [disabled]="addSaleForm.invalid" (click)="onSubmit()">Submit</button>    
-    </form>
+    <!-- <div *ngIf="addItemForm.get('active')?.invalid && addItemForm.get('active')?.touched" class="validation-warning"></div> -->
+
+    <button type="submit" [disabled]="addSaleForm.invalid" (click)="onSubmit()">
+      Submit
+    </button>
+  </form>
 </div>

@@ -1,33 +1,38 @@
-
 <div class="container">
-    <button (click)="addNewSale()">Add Sale</button>
-    <table class="item-list-table">
-      <thead>
-        <tr>
-          <th>SaleId</th>
-          <th>ItemName</th>
-          <th>Quantity</th>
-          <th>Price</th>
-          <th>SalesAmount</th>
-          <th>SalesDate</th>
-          <th>InsertedDate</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let sale of salesData">
-          <td>{{ sale.salesId }}</td>
-          <td>{{ sale.itemName }}</td>
-          <td>{{ sale.quantity }}</td>
-          <td>{{ sale.price }}</td>
-          <td>{{ sale.salesAmount }}</td>
-          <td>{{ sale.salesDate }}</td>
-          <td>{{ sale.insertedDate }}</td>
-          <td>
-            <button (click)="deleteSaleRecord(sale.salesId)">Delete</button>
-            <button (click)="updateSalesRecord(sale)">Edit</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+  <button (click)="addNewSale()">Add Sale</button>
+  <table class="item-list-table">
+    <thead>
+      <tr>
+        <th>SaleId</th>
+        <th>ItemName</th>
+        <th>Quantity</th>
+        <th>Price</th>
+        <th>SalesAmount</th>
+        <th>SalesDate</th>
+        <th>InsertedDate</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let sale of filteredSalesData">
+        <td>{{ sale.salesId }}</td>
+        <td>{{ sale.itemName }}</td>
+        <td>{{ sale.quantity }}</td>
+        <td>{{ sale.price }}</td>
+        <td>{{ sale.salesAmount }}</td>
+        <td>{{ sale.salesDate }}</td>
+        <td>{{ sale.insertedDate }}</td>
+        <td>
+          <button (click)="deleteSaleRecord(sale.salesId)">Delete</button>
+          <button (click)="updateSalesRecord(sale)">Edit</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <app-pagination
+    [currentPage]="currentPage"
+    [itemsPerPage]="itemsPerPage"
+    [totalItems]="totalItems"
+    (pageChanged)="onPageChange($event)"
+  ></app-pagination>
 </div>

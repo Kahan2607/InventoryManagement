@@ -2,7 +2,11 @@
 
 <div class="container">
   <button (click)="addNewItem()">Add Item</button>
-  <input id="search-items" (input)="fetchResults($event)" placeholder="Search for items...">
+  <input
+    id="search-items"
+    (input)="fetchResults($event)"
+    placeholder="Search for items..."
+  />
   <label for="categoryStatus">Status:</label>
   <select name="categoryStatus" (change)="filterCategories($event)">
     <option value="all">ALL</option>
@@ -39,6 +43,4 @@
     [totalItems]="totalItems"
     (pageChanged)="onPageChange($event)"
   ></app-pagination>
-  </div>
-
-  
+</div>

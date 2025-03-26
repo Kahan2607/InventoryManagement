@@ -1,25 +1,51 @@
 <div class="container">
-    <form [formGroup]="addItemForm">
-        <!-- <input type="hidden" [value]="categoryItem[0].isEdit"> -->
-        <label for="name">Name</label>
-        <input type="text" formControlName="name" placeholder="Enter the name" [value]="editItemData.name">
-        <div *ngIf="addItemForm.get('name')?.invalid && addItemForm.get('name')?.touched" class="validation-warning">
-            'Name' is required
-        </div>
+  <form [formGroup]="addItemForm">
+    <!-- <input type="hidden" [value]="categoryItem[0].isEdit"> -->
+    <label for="name">Name</label>
+    <input
+      type="text"
+      formControlName="name"
+      placeholder="Enter the name"
+      [value]="editItemData.name"
+    />
+    <div
+      *ngIf="
+        addItemForm.get('name')?.invalid && addItemForm.get('name')?.touched
+      "
+      class="validation-warning"
+    >
+      'Name' is required
+    </div>
 
-        <label for="category">Category</label>
-        <select formControlName="category" >
-            <option *ngFor="let category of categoryData" [value]="category.categoryId">
-                {{ category.categoryName }}
-            </option>
-        </select>
-        <div *ngIf="addItemForm.get('category')?.invalid && addItemForm.get('category')?.touched" class="validation-warning">
-            'Category' is required
-        </div>
+    <label for="category">Category</label>
+    <select formControlName="category">
+      <option
+        *ngFor="let category of categoryData"
+        [value]="category.categoryId"
+      >
+        {{ category.categoryName }}
+      </option>
+    </select>
+    <div
+      *ngIf="
+        addItemForm.get('category')?.invalid &&
+        addItemForm.get('category')?.touched
+      "
+      class="validation-warning"
+    >
+      'Category' is required
+    </div>
 
-        <label for="active">Active<input type="checkbox" formControlName="active" value="unchecked"></label>
-        <div *ngIf="addItemForm.get('active')?.invalid && addItemForm.get('active')?.touched" class="validation-warning"></div>
-        
-        <button type="submit" (click)="onSubmit()">Submit</button>    
-    </form>
+    <label for="active"
+      >Active<input type="checkbox" formControlName="active" value="unchecked"
+    /></label>
+    <div
+      *ngIf="
+        addItemForm.get('active')?.invalid && addItemForm.get('active')?.touched
+      "
+      class="validation-warning"
+    ></div>
+
+    <button type="submit" (click)="onSubmit()">Submit</button>
+  </form>
 </div>
