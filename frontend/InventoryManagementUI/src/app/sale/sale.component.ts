@@ -179,6 +179,7 @@ export class SaleComponent {
 
   fetchDataBetweenDates(event: Event) {
     // this.setData(this.currentPage);
+    this.currentPage = 1;
     const salesDataBetweenDatesButton = document.getElementById(
       'fetch-data-between-dates'
     );

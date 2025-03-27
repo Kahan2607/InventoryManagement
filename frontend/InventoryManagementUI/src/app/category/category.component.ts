@@ -159,6 +159,9 @@ export class CategoryComponent {
         this.categories = data;
         this.filteredCategories = [...this.categories];
       });
+      this.categoryService.totalItems$.subscribe((value) => {
+        this.totalItems = value;
+      });
       // this.filteredCategories = this.categories;
       // this.fetchData();
     } else if (selectedValue === 'active') {
@@ -172,6 +175,9 @@ export class CategoryComponent {
         this.categories = data;
         this.filteredCategories = [...this.categories];
       });
+      this.categoryService.totalItems$.subscribe((value) => {
+        this.totalItems = value;
+      });
     } else if (selectedValue === 'inactive') {
       this.status = 'inactive';
       this.categoryService.getPaginatedCategoriesFromApi(
@@ -182,6 +188,10 @@ export class CategoryComponent {
       this.categoryService.categories$.subscribe((data) => {
         this.categories = data;
         this.filteredCategories = [...this.categories];
+      });
+      this.categoryService.totalItems$.subscribe((value) => {
+        this.totalItems = value;
+        console.log(this.totalItems);
       });
     }
   }
