@@ -1,46 +1,72 @@
 <!-- <p>category works!</p> -->
+<head>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+  />
+</head>
 
 <div class="container">
-  <button (click)="addNewItem()">Add Item</button>
-  <input
-    id="search-items"
-    (input)="fetchResults($event)"
-    placeholder="Search for items..."
-  />
-  <label for="categoryStatus">Status:</label>
-  <select name="categoryStatus" (change)="filterCategories($event)">
-    <option value="all">ALL</option>
-    <option value="active">Active</option>
-    <option value="inactive">Inactive</option>
-  </select>
-  <table class="item-list-table">
-    <thead>
-      <tr>
-        <th>ItemId</th>
-        <th>CategoryName</th>
-        <th>ItemName</th>
-        <th>Active</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let item of filteredItemsData">
-        <td>{{ item.itemId }}</td>
-        <td>{{ item.categoryName }}</td>
-        <td>{{ item.name }}</td>
-        <td>{{ item.active }}</td>
-        <td>
-          <button (click)="confirmMessage(item.itemId)">Delete</button>
-          <button (click)="updateItem(item)">Edit</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="display-item-data">
+    <div class="search-container">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input
+        id="search-items"
+        class="search-item-input-field"
+        (input)="fetchResults($event)"
+        placeholder="Search for items..."
+      />
+    </div>
 
-  <app-pagination
-    [currentPage]="currentPage"
-    [itemsPerPage]="itemsPerPage"
-    [totalItems]="totalItems"
-    (pageChanged)="onPageChange($event)"
-  ></app-pagination>
+    <div class="status-selector-add-item-row">
+      <label class="status-label" for="itemStatus">Status:</label>
+      <select
+        class="status-selector"
+        name="itemStatus"
+        (change)="filterCategories($event)"
+      >
+        <option value="all">ALL</option>
+        <option value="active">Active</option>
+        <option value="inactive">Inactive</option>
+      </select>
+      <button class="add-item-button" (click)="addNewItem()">
+        <i class="fa fa-plus"></i> Item
+      </button>
+    </div>
+
+    <table class="item-list-table">
+      <thead>
+        <tr class="item-data-title-row">
+          <th>ItemId</th>
+          <th>CategoryName</th>
+          <th>ItemName</th>
+          <th>Active</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of filteredItemsData">
+          <td>{{ item.itemId }}</td>
+          <td>{{ item.categoryName }}</td>
+          <td>{{ item.name }}</td>
+          <td>{{ item.active }}</td>
+          <td>
+            <i class="fa fa-pen-to-square" (click)="updateItem(item)"></i>
+            <i
+              class="fa-solid fa-trash"
+              (click)="confirmMessage(item.itemId)"
+            ></i>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <app-pagination
+      class="pagination-component"
+      [currentPage]="currentPage"
+      [itemsPerPage]="itemsPerPage"
+      [totalItems]="totalItems"
+      (pageChanged)="onPageChange($event)"
+    ></app-pagination>
+  </div>
 </div>
