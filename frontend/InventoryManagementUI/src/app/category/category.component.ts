@@ -147,7 +147,7 @@ export class CategoryComponent {
 
   filterCategories(event: Event) {
     const selectedValue = (event.target as HTMLSelectElement).value;
-
+    this.currentPage = 1;
     if (selectedValue === 'all') {
       this.status = 'all';
       this.categoryService.getPaginatedCategoriesFromApi(

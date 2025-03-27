@@ -140,9 +140,10 @@ export class ItemComponent {
     this.router.navigate(['items/update-item']);
   }
 
-  filterCategories(event: Event) {
+  filterItems(event: Event) {
     const selectedValue = (event.target as HTMLSelectElement).value;
 
+    this.currentPage = 1;
     this.status = selectedValue;
     console.log(selectedValue);
 
@@ -236,6 +237,11 @@ export class ItemComponent {
       'search-items'
     ) as HTMLInputElement;
     console.log('User typed: ', inputSearchElement.value);
+
+    this.currentPage = 1;
+
+    this.itemService.ifNameFilter = true;
+    this.itemService.itemNameFromSearchFilter = inputSearchElement.value;
 
     const categoryData$ = this.categoryService.getAllCategoriesFromApi();
 

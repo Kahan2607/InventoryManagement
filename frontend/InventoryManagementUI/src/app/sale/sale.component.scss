@@ -1,23 +1,87 @@
-.container{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin-block: 20px;
+body {
+  background-color: #eefcff;
 }
 
-table{
-    border: 1px solid black;
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  background-color: #eeefef;
+  height: 100vh;
 }
 
-td{
-    text-align: center;
+.display-sale-data {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
 }
 
-.category-list-table{
-    width: 70vw;
+table {
+  border-collapse: collapse;
+  border: 1px solid black;
 }
 
-.filter-buttons{
-    display: inline-block;
+.sale-list-table {
+  width: 70vw;
+}
+
+.sale-data-title-row {
+  background-color: rgb(130, 128, 128);
+}
+
+.add-sale-button {
+  // margin-top: 20px;
+  width: 100px;
+  margin-left: auto;
+  margin-right: 0;
+  background-color: #28a745;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.add-sale-button:hover {
+  opacity: 0.7;
+  transition: 500ms;
+}
+
+td {
+  text-align: center;
+}
+
+.category-list-table {
+  width: 70vw;
+}
+
+.starting-date-label,
+.ending-date-label {
+  width: 100px;
+}
+
+.starting-date,
+.ending-date {
+  width: 30%;
+}
+
+.filter-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.fa-pen-to-square,
+.fa-trash {
+  cursor: pointer;
+  margin-inline: 1px;
+}
+
+.fa-pen-to-square:hover,
+.fa-trash:hover {
+  opacity: 0.6;
+  transition: 400ms;
+}
+
+.pagination-component {
+  margin-top: 5px;
+  margin-inline: auto;
 }

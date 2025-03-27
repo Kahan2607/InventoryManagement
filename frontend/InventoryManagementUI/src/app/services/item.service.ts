@@ -8,6 +8,8 @@ import { Item } from '../model/item.type';
 })
 export class ItemService {
   isAdd: boolean = false;
+  itemNameFromSearchFilter: string = '';
+  ifNameFilter: boolean = false;
   updatedItem: Item = {
     itemId: 0,
     categoryId: 0,
@@ -39,10 +41,14 @@ export class ItemService {
     console.log('Value of page is ', page);
 
     const url = `https://localhost:5034/api/item/${page}/${itemsPerPage}`;
-    const params = new HttpParams()
+    var params = new HttpParams()
       .set('page', page.toString())
       .set('itemsPerPage', itemsPerPage.toString())
       .set('status', status);
+
+    if (this.ifNameFilter) {
+      params = params.set('itemName', this.itemNameFromSearchFilter);
+    }
     console.log("inside item's service");
 
     this.http
