@@ -1,10 +1,15 @@
 <!-- <p>pagination works!</p> -->
 <div class="pagination">
-  <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">
+  <button
+    class="previous-button"
+    (click)="changePage(currentPage - 1)"
+    [disabled]="currentPage === 1"
+  >
     Previous
   </button>
   <span>Page {{ currentPage }} of {{ totalPages }}</span>
   <button
+    class="next-button"
     (click)="changePage(currentPage + 1)"
     [disabled]="currentPage === totalPages"
   >

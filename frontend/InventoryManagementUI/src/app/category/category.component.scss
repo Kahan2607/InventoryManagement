@@ -1,23 +1,129 @@
-.container{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin-block: 20px;
+body {
+  background-color: #eefcff;
 }
 
-table{
-    border: 1px solid black;
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  background-color: #eeefef;
+  height: 100vh;
 }
 
-th{
-    cursor: pointer;
+.status-selector {
+  width: 100px;
+  background-color: #f8f9fa;
+  color: #333; /* Dark gray text */
+  border: 1px solid #ccc; /* Light border */
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
 }
 
-td{
-    text-align: center;
+.status-selector:hover {
+  background-color: #e2e6ea;
 }
 
-.category-list-table{
-    width: 70vw;
+.status-selector:focus {
+  border-color: #007bff; /* Blue highlight */
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.display-category-data {
+  display: flex;
+  flex-direction: column;
+}
+
+.search-container {
+  margin-top: 50px;
+  // display: inline-block;
+  position: relative;
+  display: flex;
+  align-items: center;
+  // justify-content: center;
+  margin-bottom: 2px;
+}
+
+.search-container i {
+  position: absolute;
+  left: 5px;
+  color: gray;
+}
+
+.status-label {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 2px;
+  color: #333;
+}
+
+.search-category-input-field {
+  width: 100%;
+  padding: 8px 12px 8px 35px; /* Extra left padding for icon */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  transition: 0.3s ease;
+}
+
+table {
+  border-collapse: collapse;
+  border: 1px solid black;
+}
+
+.category-data-title-row {
+  background-color: rgb(130, 128, 128);
+}
+
+th {
+  cursor: pointer;
+}
+
+td {
+  text-align: center;
+}
+
+.category-list-table {
+  width: 40vw;
+}
+
+.add-category-button {
+  // margin-top: 20px;
+  width: 100px;
+  margin-left: auto;
+  margin-right: 0;
+  background-color: #28a745;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.add-category-button:hover {
+  opacity: 0.7;
+  transition: 500ms;
+}
+
+.fa-pen-to-square,
+.fa-trash {
+  cursor: pointer;
+  margin-inline: 1px;
+}
+
+.fa-pen-to-square:hover,
+.fa-trash:hover {
+  opacity: 0.6;
+  transition: 400ms;
+}
+
+.pagination-component {
+  margin-top: 5px;
+  margin-inline: auto;
+}
+
+.add-category-butto:hover {
+  opacity: 0.6;
+  transition: 800ms;
 }

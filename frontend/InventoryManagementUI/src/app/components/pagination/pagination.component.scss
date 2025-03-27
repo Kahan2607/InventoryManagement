@@ -1,0 +1,17 @@
+.previous-button,
+.next-button {
+  background-color: #007bff;
+  border-radius: 5px;
+  margin-inline: 2px;
+}
+
+.previous-button:hover,
+.next-button:hover {
+  background-color: #0056b3;
+  transition: 300ms;
+}
+
+.previous-button:disabled,
+.next-button:disabled {
+  background-color: #d6d6d6;
+}

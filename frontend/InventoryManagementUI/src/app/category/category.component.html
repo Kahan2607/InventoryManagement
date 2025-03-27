@@ -1,54 +1,69 @@
 <!-- <p>category works!</p> -->
+<head>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+  />
+</head>
 <div class="container">
-  
-    
-  <button (click)="openDialog()">Add Category</button>
-  <input id="search-categories" (input)="fetchResults($event)" placeholder="Search for categories...">
-  <label for="categoryStatus">Status:</label>
-  <select name="categoryStatus" (change)="filterCategories($event)">
-    <option value="all">ALL</option>
-    <option value="active">Active</option>
-    <option value="inactive">Inactive</option>
-  </select>
-  <table class="category-list-table">
-    <thead>
-      <tr>
-        <th (click)="sortByCategoryId()">CategoryId</th>
-        <th (click)="sortByCategoryName()">CategoryName</th>
-        <th>Active</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let items of filteredCategories">
-        <td>{{ items.categoryId }}</td>
-        <td>{{ items.name }}</td>
-        <td>{{ items.active }}</td>
-        <td>
-          <button (click)="update(items)">Edit</button>
-          <button (click)="confirmMessage(items.categoryId)">Delete</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="display-category-data">
+    <div class="search-container">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input
+        class="search-category-input-field"
+        id="search-categories"
+        (input)="fetchResults($event)"
+        placeholder="Search for categories..."
+      />
+    </div>
+    <label class="status-label" for="categoryStatus"
+      >Status:
+      <select
+        class="status-selector"
+        name="categoryStatus"
+        (change)="filterCategories($event)"
+      >
+        <option value="all">ALL</option>
+        <option value="active">Active</option>
+        <option value="inactive">Inactive</option>
+      </select>
+      <button class="add-category-button" (click)="openDialog()">
+        <i class="fa fa-plus"></i>Category
+      </button>
+    </label>
+    <table class="category-list-table">
+      <thead>
+        <tr class="category-data-title-row">
+          <th (click)="sortByCategoryId()">Id</th>
+          <th (click)="sortByCategoryName()">Name</th>
+          <th>Active</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let items of filteredCategories">
+          <td>{{ items.categoryId }}</td>
+          <td>{{ items.name }}</td>
+          <td>{{ items.active }}</td>
+          <td>
+            <!-- <button (click)="update(items)">Edit</button> -->
+            <i class="fa fa-pen-to-square" (click)="update(items)"></i>
+            <i
+              class="fa-solid fa-trash"
+              (click)="confirmMessage(items.categoryId)"
+            ></i>
+            <!-- <button (click)="confirmMessage(items.categoryId)">Delete</button> -->
+          </td>
+        </tr>
+      </tbody>
+    </table>
 
-
-    
-  <app-pagination
-    [currentPage]="currentPage"
-    [itemsPerPage]="itemsPerPage"
-    [totalItems]="totalItems"
-    (pageChanged)="onPageChange($event)"
-  ></app-pagination>
-
-  <!-- <div class="pagination-controls">
-  <button (click)="goToPreviousPage()" [disabled]="currentPage === 1">Previous</button>
-  <button (click)="goToNextPage()" [disabled]="currentPage === this.pagination.totalPages">Next</button>
-  <select (change)="goToPage($event)">
-    <option *ngFor="let page in pagination.totalPages" [value]="page">{{ page }}</option>
-  </select>
-  </div> -->
-
+    <app-pagination
+      class="pagination-component"
+      [currentPage]="currentPage"
+      [itemsPerPage]="itemsPerPage"
+      [totalItems]="totalItems"
+      (pageChanged)="onPageChange($event)"
+    ></app-pagination>
+  </div>
 </div>
-
-
