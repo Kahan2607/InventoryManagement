@@ -12,9 +12,15 @@
     placeholder="Enter the ending date..."
     [(ngModel)]="endingDate"
   />
-  <button id="fetch-data-between-dates" (click)="fetchDataBetweenDates($event)">
-    Search Records
-  </button>
+  <div class="filter-buttons">
+    <button
+      id="fetch-data-between-dates"
+      (click)="fetchDataBetweenDates($event)"
+    >
+      Search Records
+    </button>
+    <!-- <button (click)="resetDateValues()">Clear</button> -->
+  </div>
   <table class="item-list-table">
     <thead>
       <tr>

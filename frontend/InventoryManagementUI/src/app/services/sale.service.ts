@@ -21,6 +21,11 @@ export class SaleService {
   page = 1;
   itemPerPage = 10;
   totalItems = 0;
+  ifFilter: boolean = false;
+  ifStartingDate: boolean = false;
+  ifEndingDate: boolean = false;
+  startingDate: Date = new Date();
+  endingDate: Date = new Date();
 
   private saleSubject = new BehaviorSubject<Sale[]>([]);
   sales$ = this.saleSubject.asObservable();
@@ -39,19 +44,25 @@ export class SaleService {
     console.log('Value of page is ', page);
 
     const url = `https://localhost:5034/api/sale/${page}/${itemsPerPage}`;
-    const params = new HttpParams()
+    let params = new HttpParams()
       .set('page', page.toString())
       .set('itemsPerPage', itemsPerPage.toString());
-    // .set('status', status);
     console.log("inside item's service");
+
+    if (this.ifFilter && this.ifStartingDate) {
+      params = params.set('startingDate', this.startingDate.toString());
+      // .set('endingDate', this.endingDate.toString());
+    }
+    if (this.ifFilter && this.ifEndingDate) {
+      params = params.set('endingDate', this.endingDate.toString());
+      // .set('endingDate', this.endingDate.toString());
+    }
 
     this.http
       .get<{ saleData: Sale[]; totalItems: number }>(url, { params })
       .subscribe({
         next: (response) => {
           this.saleSubject.next(response.saleData); // Update category data
-          console.log(response.totalItems);
-
           this.totalSalesRecordSubject.next(response.totalItems); // Update total items count
         },
         error: (error) => console.log('Error fetching the data', error),

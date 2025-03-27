@@ -183,18 +183,41 @@ export class SaleComponent {
       'fetch-data-between-dates'
     );
 
+    const inputStartingDate = document.getElementById(
+      'starting-date'
+    ) as HTMLInputElement;
+    const inputEndingDate = document.getElementById(
+      'ending-date'
+    ) as HTMLInputElement;
+
+    this.saleService.ifFilter = true;
+
+    if (inputStartingDate.value != '') {
+      this.saleService.ifStartingDate = true;
+      this.saleService.startingDate = this.startingDate;
+    }
+    if (inputEndingDate.value != '') {
+      this.saleService.ifEndingDate = true;
+      this.saleService.endingDate = this.endingDate;
+    }
+
     const itemData$ = this.itemService.getItemsFromApi();
 
     this.saleService.getPaginatedSalesRecordFromApi(this.currentPage, 10);
-    const filteredSalesData$ = this.saleService.sales$.pipe(
-      map((sales) => {
-        return sales.filter(
-          (sale) =>
-            sale.salesDate >= this.startingDate &&
-            sale.salesDate <= this.endingDate
-        );
-      })
-    );
+    const filteredSalesData$ = this.saleService.sales$;
+    this.saleService.totalSalesRecord$.subscribe((value) => {
+      this.totalItems = value;
+      console.log('Inside the fetchBetweenData method ', this.totalItems);
+    });
+    // const filteredSalesData$ = this.saleService.sales$.pipe(
+    //   map((sales) => {
+    //     return sales.filter(
+    //       (sale) =>
+    //         sale.salesDate >= this.startingDate &&
+    //         sale.salesDate <= this.endingDate
+    //     );
+    //   })
+    // );
 
     const tempSalesData$ = combineLatest([filteredSalesData$, itemData$])
       .pipe(
@@ -213,7 +236,11 @@ export class SaleComponent {
       });
   }
 
-  // ngOnDestroy() {
-  //   console.log('sale component destroyed.');
+  // resetDateValues(){
+  //   this.saleService.ifFilter = false;
+
+  //   this.saleService.startingDate = this.new Date();
+  //   this.saleService.endingDate = new Date();
+
   // }
 }
