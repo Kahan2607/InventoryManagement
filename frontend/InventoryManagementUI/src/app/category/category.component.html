@@ -16,8 +16,8 @@
         placeholder="Search for categories..."
       />
     </div>
-    <label class="status-label" for="categoryStatus"
-      >Status:
+    <div class="status-selector-add-category-row">
+      <label class="status-label" for="categoryStatus">Status:</label>
       <select
         class="status-selector"
         name="categoryStatus"
@@ -30,7 +30,7 @@
       <button class="add-category-button" (click)="openDialog()">
         <i class="fa fa-plus"></i>Category
       </button>
-    </label>
+    </div>
     <table class="category-list-table">
       <thead>
         <tr class="category-data-title-row">

@@ -19,6 +19,7 @@ body {
   padding: 5px 10px;
   border-radius: 5px;
   font-size: 14px;
+  text-align: center;
   cursor: pointer;
   transition: 0.3s ease-in-out;
 }
@@ -54,10 +55,15 @@ body {
   color: gray;
 }
 
-.status-label {
+.status-selector-add-category-row {
   display: flex;
   flex-direction: row;
   margin-bottom: 2px;
+}
+
+.status-label {
+  margin-bottom: 2px;
+  margin-block: auto;
   color: #333;
 }
 

@@ -1,19 +1,21 @@
 <!-- <p>header works!</p> -->
 <header>
-    <nav>
-        <ul>
-            <li>
-                <button (click)="showCategories()">Categories</button>
-            </li>
-            <li>
-                <button (click)="showItems()">Items</button>
-            </li>
-            <li>
-                <button (click)="showSales()">Sales</button>
-            </li>
-            <li>
-                <button (click)="logout()">Logout</button>
-            </li>
-        </ul>
-    </nav>
+  <nav>
+    <ul>
+      <li>
+        <button class="categories-button" (click)="showCategories()">
+          Categories
+        </button>
+      </li>
+      <li>
+        <button class="items-button" (click)="showItems()">Items</button>
+      </li>
+      <li>
+        <button class="sales-button" (click)="showSales()">Sales</button>
+      </li>
+      <li>
+        <button class="logout-button" (click)="logout()">Logout</button>
+      </li>
+    </ul>
+  </nav>
 </header>
