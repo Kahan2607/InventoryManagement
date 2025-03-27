@@ -16,6 +16,8 @@ import {
 import { Router } from '@angular/router';
 import { PaginationComponent } from '../components/pagination/pagination.component';
 import { Target } from '@angular/compiler';
+import { DeleteInfoMessageComponent } from '../components/delete-info-message/delete-info-message.component';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-item',
@@ -24,6 +26,7 @@ import { Target } from '@angular/compiler';
   styleUrl: './item.component.scss',
 })
 export class ItemComponent {
+  dialogRef?: MatDialogRef<DeleteInfoMessageComponent>;
   tempItemData: {
     itemId: number;
     categoryId: number;
@@ -56,7 +59,8 @@ export class ItemComponent {
   constructor(
     private itemService: ItemService,
     private categoryService: CategoryService,
-    private router: Router
+    private router: Router,
+    public dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -275,5 +279,21 @@ export class ItemComponent {
         this.filteredItemsData = [...this.itemsData];
         console.log(this.filteredItemsData);
       });
+  }
+
+  confirmMessage(itemId: Item['itemId']) {
+    this.dialogRef = this.dialog.open(DeleteInfoMessageComponent, {
+      disableClose: false,
+    });
+    this.dialogRef.componentInstance.confirmMessage =
+      'Are you sure you want to delete?';
+
+    this.dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        // do confirmation actions
+        this.deleteItem(itemId);
+      }
+      this.dialogRef = undefined;
+    });
   }
 }

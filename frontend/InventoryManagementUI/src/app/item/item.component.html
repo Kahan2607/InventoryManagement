@@ -30,7 +30,7 @@
         <td>{{ item.name }}</td>
         <td>{{ item.active }}</td>
         <td>
-          <button (click)="deleteItem(item.itemId)">Delete</button>
+          <button (click)="confirmMessage(item.itemId)">Delete</button>
           <button (click)="updateItem(item)">Edit</button>
         </td>
       </tr>
