@@ -28,6 +28,12 @@ td {
   background-color: rgb(130, 128, 128);
 }
 
+.itemid-title,
+.categoryName-title,
+.itemName-title {
+  cursor: pointer;
+}
+
 .display-item-data {
   display: flex;
   flex-direction: column;

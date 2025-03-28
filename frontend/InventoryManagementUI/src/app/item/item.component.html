@@ -37,9 +37,11 @@
     <table class="item-list-table">
       <thead>
         <tr class="item-data-title-row">
-          <th>ItemId</th>
-          <th>CategoryName</th>
-          <th>ItemName</th>
+          <th class="itemid-title" (click)="sortItems('itemId')">ItemId</th>
+          <th class="categoryName-title" (click)="sortItems('categoryName')">
+            CategoryName
+          </th>
+          <th class="itemName-title" (click)="sortItems('name')">ItemName</th>
           <th>Active</th>
           <th>Actions</th>
         </tr>

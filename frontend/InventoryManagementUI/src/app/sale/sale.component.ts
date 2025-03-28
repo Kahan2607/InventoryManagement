@@ -13,7 +13,7 @@ import {
   switchMap,
 } from 'rxjs';
 import { Item } from '../model/item.type';
-import { NgFor } from '@angular/common';
+import { CommonModule, NgFor } from '@angular/common';
 import { Router } from '@angular/router';
 import { Sale } from '../model/sale.type';
 import { PaginationComponent } from '../components/pagination/pagination.component';
@@ -21,7 +21,7 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-sale',
-  imports: [NgFor, PaginationComponent, FormsModule],
+  imports: [NgFor, PaginationComponent, FormsModule, CommonModule],
   templateUrl: './sale.component.html',
   styleUrl: './sale.component.scss',
 })

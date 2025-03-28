@@ -61,7 +61,7 @@
           <td>{{ sale.quantity }}</td>
           <td>{{ sale.price }}</td>
           <td>{{ sale.salesAmount }}</td>
-          <td>{{ sale.salesDate }}</td>
+          <td>{{ sale.salesDate | date : 'longDate' }}</td>
           <td>{{ sale.insertedDate }}</td>
           <td>
             <!-- <button (click)="deleteSaleRecord(sale.salesId)">Delete</button>

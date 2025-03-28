@@ -22,6 +22,9 @@ export class ItemService {
   page = 1;
   itemPerPage = 10;
   totalItems = 0;
+  sortBy: string = 'categoryId';
+  // sortOrder: string = 'id';
+  sortOrderIsAscending: boolean = true;
 
   status = 'all';
   private itemsSubject = new BehaviorSubject<Item[]>([]); // items behaviour subject list which will store the data throughout the flow
@@ -44,7 +47,9 @@ export class ItemService {
     var params = new HttpParams()
       .set('page', page.toString())
       .set('itemsPerPage', itemsPerPage.toString())
-      .set('status', status);
+      .set('status', status)
+      .set('sortBy', this.sortBy)
+      .set('sortOrderIsAscending', this.sortOrderIsAscending);
 
     if (this.ifNameFilter) {
       params = params.set('itemName', this.itemNameFromSearchFilter);

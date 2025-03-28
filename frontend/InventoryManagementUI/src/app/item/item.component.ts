@@ -63,6 +63,8 @@ export class ItemComponent {
     public dialog: MatDialog
   ) {}
 
+  sortBy: string = 'itemId';
+  sortOrderIsAscending: boolean = true;
   ngOnInit(): void {
     // this.itemService.getItemsFromApi();
 
@@ -301,5 +303,49 @@ export class ItemComponent {
       }
       this.dialogRef = undefined;
     });
+  }
+
+  sortItems(sortBy: string) {
+    if (this.sortBy !== sortBy) {
+      this.itemService.sortOrderIsAscending = true;
+    }
+
+    this.sortBy = sortBy;
+    this.sortOrderIsAscending = !this.sortOrderIsAscending;
+    this.itemService.sortBy = sortBy;
+    this.itemService.sortOrderIsAscending = this.sortOrderIsAscending;
+    this.currentPage = 1;
+
+    const categoryData$ = this.categoryService.getAllCategoriesFromApi();
+
+    this.itemService.getPaginatedItemsFromApi(
+      this.currentPage,
+      10,
+      this.status
+    );
+
+    this.itemService.items$.subscribe((data) => {
+      this.tempItemData = data;
+      // this. = [...this.categories];
+    });
+    this.categoryService.totalItems$.subscribe((value) => {
+      this.totalItems = value;
+    });
+    combineLatest([this.itemService.items$, categoryData$])
+      .pipe(
+        map(([items, categories]) =>
+          items.map((item) => ({
+            ...item,
+            categoryName:
+              categories.find(
+                (category) => category.categoryId === item.categoryId
+              )?.name || 'Unknown',
+          }))
+        )
+      )
+      .subscribe((data) => {
+        this.itemsData = data;
+        this.filteredItemsData = [...this.itemsData];
+      });
   }
 }

@@ -58,8 +58,7 @@ export class AddSaleComponent {
       item: [null, Validators.required], // Dropdown selection
       quantity: [null, [Validators.required, Validators.min(1)]], // Ensure minimum 1
       price: [null, [Validators.required, Validators.min(0.01)]], // Ensure positive price
-      salesDate: ['', Validators.required], // Date input
-      // insertedDate: [new Date(), Validators.required] // Default to current date
+      salesDate: ['', Validators.required],
     });
 
     this.isAdd = this._saleService.isAdd;

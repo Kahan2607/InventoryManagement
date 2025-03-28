@@ -31,8 +31,6 @@ export class CategoryComponent {
     public dialog: MatDialog
   ) {}
 
-  isAscendingId: boolean = true;
-  isAscendingName: boolean = true;
   sortBy: string = 'categoryId';
   sortOrderIsAscending: boolean = true;
 
