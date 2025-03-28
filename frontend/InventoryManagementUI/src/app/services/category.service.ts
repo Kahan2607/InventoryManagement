@@ -30,6 +30,8 @@ export class CategoryService {
   page = 1;
   itemPerPage = 10;
   totalItems = 0;
+  isAscendingId = false;
+  ifFilterCategoryId: boolean = false;
 
   constructor(private http: HttpClient) {}
 
@@ -44,10 +46,19 @@ export class CategoryService {
     status: string
   ) {
     const url = `https://localhost:5034/api/category/${page}/${itemsPerPage}`;
-    const params = new HttpParams()
+    var params = new HttpParams()
       .set('page', page.toString())
       .set('itemsPerPage', itemsPerPage.toString())
       .set('status', status);
+
+    if (this.ifFilterCategoryId) {
+      params = params.set(
+        'ifFilterCategoryID',
+        this.ifFilterCategoryId.toString()
+      );
+      params = params.set('isAscendingId', this.isAscendingId.toString());
+    }
+
     console.log('insdie category service');
 
     this.http

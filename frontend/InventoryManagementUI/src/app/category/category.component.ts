@@ -31,7 +31,7 @@ export class CategoryComponent {
     public dialog: MatDialog
   ) {}
 
-  isAscendingId: boolean = false;
+  isAscendingId: boolean = true;
   isAscendingName: boolean = false;
 
   ngOnInit(): void {
@@ -129,15 +129,29 @@ export class CategoryComponent {
 
   sortByCategoryId() {
     this.isAscendingId = !this.isAscendingId;
-    this.filteredCategories.sort((a, b) =>
-      this.isAscendingId
-        ? b.categoryId - a.categoryId
-        : a.categoryId - b.categoryId
+    this.categoryService.isAscendingId = this.isAscendingId;
+    this.categoryService.ifFilterCategoryId = true;
+
+    this.currentPage = 1;
+
+    this.categoryService.getPaginatedCategoriesFromApi(
+      this.currentPage,
+      10,
+      this.status
     );
+
+    this.categoryService.categories$.subscribe((data) => {
+      this.categories = data;
+      this.filteredCategories = [...this.categories];
+    });
+    this.categoryService.totalItems$.subscribe((value) => {
+      this.totalItems = value;
+    });
   }
 
   sortByCategoryName() {
     this.isAscendingName = !this.isAscendingName;
+    this.categoryService.ifFilterCategoryId = true;
     this.filteredCategories.sort((a, b) =>
       this.isAscendingName
         ? b.name.localeCompare(a.name)
