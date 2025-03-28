@@ -32,7 +32,9 @@ export class CategoryComponent {
   ) {}
 
   isAscendingId: boolean = true;
-  isAscendingName: boolean = false;
+  isAscendingName: boolean = true;
+  sortBy: string = 'categoryId';
+  sortOrderIsAscending: boolean = true;
 
   ngOnInit(): void {
     // this.categoryService.getCategoriesFromApi();
@@ -119,7 +121,6 @@ export class CategoryComponent {
         active: false,
       },
     });
-    // this.categoryService.page = this.currentPage;
   }
 
   deleteCategory(categoryId: Category['categoryId']) {
@@ -127,11 +128,15 @@ export class CategoryComponent {
     this.categoryService.deleteACategory(categoryId);
   }
 
-  sortByCategoryId() {
-    this.isAscendingId = !this.isAscendingId;
-    this.categoryService.isAscendingId = this.isAscendingId;
-    this.categoryService.ifFilterCategoryId = true;
+  sortCategories(sortby: string) {
+    if (this.sortBy !== sortby) {
+      this.categoryService.sortOrderIsAscending = true;
+    }
 
+    this.sortBy = sortby;
+    this.sortOrderIsAscending = !this.sortOrderIsAscending;
+    this.categoryService.sortBy = sortby;
+    this.categoryService.sortOrderIsAscending = this.sortOrderIsAscending;
     this.currentPage = 1;
 
     this.categoryService.getPaginatedCategoriesFromApi(
@@ -147,16 +152,6 @@ export class CategoryComponent {
     this.categoryService.totalItems$.subscribe((value) => {
       this.totalItems = value;
     });
-  }
-
-  sortByCategoryName() {
-    this.isAscendingName = !this.isAscendingName;
-    this.categoryService.ifFilterCategoryId = true;
-    this.filteredCategories.sort((a, b) =>
-      this.isAscendingName
-        ? b.name.localeCompare(a.name)
-        : a.name.localeCompare(b.name)
-    );
   }
 
   filterCategories(event: Event) {

@@ -30,8 +30,13 @@ export class CategoryService {
   page = 1;
   itemPerPage = 10;
   totalItems = 0;
+
   isAscendingId = false;
   ifFilterCategoryId: boolean = false;
+
+  sortBy: string = 'categoryId';
+  // sortOrder: string = 'id';
+  sortOrderIsAscending: boolean = true;
 
   constructor(private http: HttpClient) {}
 
@@ -49,17 +54,9 @@ export class CategoryService {
     var params = new HttpParams()
       .set('page', page.toString())
       .set('itemsPerPage', itemsPerPage.toString())
-      .set('status', status);
-
-    if (this.ifFilterCategoryId) {
-      params = params.set(
-        'ifFilterCategoryID',
-        this.ifFilterCategoryId.toString()
-      );
-      params = params.set('isAscendingId', this.isAscendingId.toString());
-    }
-
-    console.log('insdie category service');
+      .set('status', status)
+      .set('sortBy', this.sortBy)
+      .set('sortOrderIsAscending', this.sortOrderIsAscending);
 
     this.http
       .get<{ categoryData: Category[]; totalItems: number }>(url, { params })
