@@ -44,7 +44,7 @@ export class ItemService {
     console.log('Value of page is ', page);
 
     const url = `https://localhost:5034/api/item/${page}/${itemsPerPage}`;
-    var params = new HttpParams()
+    let params = new HttpParams()
       .set('page', page.toString())
       .set('itemsPerPage', itemsPerPage.toString())
       .set('status', status)

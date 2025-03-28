@@ -17,6 +17,11 @@ body {
   flex-direction: column;
 }
 
+.saleId-title,
+.itemName-title {
+  cursor: pointer;
+}
+
 table {
   border-collapse: collapse;
   border: 1px solid black;

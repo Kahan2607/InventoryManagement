@@ -44,12 +44,16 @@
     <table class="sale-list-table">
       <thead>
         <tr class="sale-data-title-row">
-          <th>SaleId</th>
-          <th>ItemName</th>
-          <th>Quantity</th>
-          <th>Price</th>
-          <th>SalesAmount</th>
-          <th>SalesDate</th>
+          <th class="saleId-title" (click)="sortingSalesData('saleId')">
+            SaleId
+          </th>
+          <th class="itemName-title" (click)="sortingSalesData('itemName')">
+            ItemName
+          </th>
+          <th (click)="sortingSalesData('quantity')">Quantity</th>
+          <th (click)="sortingSalesData('price')">Price</th>
+          <th (click)="sortingSalesData('salesAmount')">SalesAmount</th>
+          <th (click)="sortingSalesData('salesDate')">SalesDate</th>
           <th>InsertedDate</th>
           <th>Actions</th>
         </tr>

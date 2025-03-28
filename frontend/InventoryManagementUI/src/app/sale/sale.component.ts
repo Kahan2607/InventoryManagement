@@ -68,6 +68,9 @@ export class SaleComponent {
   totalItems!: number;
   startingDate = new Date();
   endingDate = new Date();
+  sortBy: string = 'saleId';
+  sortOrderIsAscending: boolean = true;
+
   ngOnInit() {
     // this.itemService.getItemsFromApi();
     // this.saleService.getAllSalesDetailsFromApi();
@@ -237,11 +240,42 @@ export class SaleComponent {
       });
   }
 
-  // resetDateValues(){
-  //   this.saleService.ifFilter = false;
+  sortingSalesData(sortBy: string) {
+    if (this.sortBy !== sortBy) {
+      this.saleService.sortOrderIsAscending = true;
+    } else {
+      this.sortOrderIsAscending = !this.sortOrderIsAscending;
+      this.saleService.sortOrderIsAscending = this.sortOrderIsAscending;
+    }
 
-  //   this.saleService.startingDate = this.new Date();
-  //   this.saleService.endingDate = new Date();
+    this.sortBy = sortBy;
+    this.saleService.sortBy = sortBy;
+    this.currentPage = 1;
 
-  // }
+    const itemData$ = this.itemService.getItemsFromApi();
+
+    this.saleService.getPaginatedSalesRecordFromApi(this.currentPage, 10);
+
+    this.saleService.sales$.subscribe((data) => {
+      this.tempSalesData = data;
+    });
+    this.saleService.totalSalesRecord$.subscribe((value) => {
+      this.totalItems = value;
+    });
+    combineLatest([this.saleService.sales$, itemData$])
+      .pipe(
+        map(([sales, items]) =>
+          sales.map((sale) => ({
+            ...sale,
+            itemName:
+              items.find((item) => item.itemId === sale.itemId)?.name ||
+              'Unknown',
+          }))
+        )
+      )
+      .subscribe((data) => {
+        this.salesData = data;
+        this.filteredSalesData = [...this.salesData];
+      });
+  }
 }

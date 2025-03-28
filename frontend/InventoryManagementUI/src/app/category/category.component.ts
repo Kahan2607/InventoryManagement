@@ -129,12 +129,13 @@ export class CategoryComponent {
   sortCategories(sortby: string) {
     if (this.sortBy !== sortby) {
       this.categoryService.sortOrderIsAscending = true;
+    } else {
+      this.sortOrderIsAscending = !this.sortOrderIsAscending;
+      this.categoryService.sortOrderIsAscending = this.sortOrderIsAscending;
     }
 
     this.sortBy = sortby;
-    this.sortOrderIsAscending = !this.sortOrderIsAscending;
     this.categoryService.sortBy = sortby;
-    this.categoryService.sortOrderIsAscending = this.sortOrderIsAscending;
     this.currentPage = 1;
 
     this.categoryService.getPaginatedCategoriesFromApi(

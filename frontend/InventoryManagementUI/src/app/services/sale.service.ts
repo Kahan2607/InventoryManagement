@@ -27,6 +27,9 @@ export class SaleService {
   startingDate: Date = new Date();
   endingDate: Date = new Date();
 
+  sortBy: string = 'saleId';
+  sortOrderIsAscending: boolean = true;
+
   private saleSubject = new BehaviorSubject<Sale[]>([]);
   sales$ = this.saleSubject.asObservable();
 
@@ -46,16 +49,16 @@ export class SaleService {
     const url = `https://localhost:5034/api/sale/${page}/${itemsPerPage}`;
     let params = new HttpParams()
       .set('page', page.toString())
-      .set('itemsPerPage', itemsPerPage.toString());
+      .set('itemsPerPage', itemsPerPage.toString())
+      .set('sortBy', this.sortBy)
+      .set('sortOrderIsAscending', this.sortOrderIsAscending);
     console.log("inside item's service");
 
     if (this.ifFilter && this.ifStartingDate) {
       params = params.set('startingDate', this.startingDate.toString());
-      // .set('endingDate', this.endingDate.toString());
     }
     if (this.ifFilter && this.ifEndingDate) {
       params = params.set('endingDate', this.endingDate.toString());
-      // .set('endingDate', this.endingDate.toString());
     }
 
     this.http

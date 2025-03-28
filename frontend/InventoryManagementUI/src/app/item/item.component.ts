@@ -308,12 +308,13 @@ export class ItemComponent {
   sortItems(sortBy: string) {
     if (this.sortBy !== sortBy) {
       this.itemService.sortOrderIsAscending = true;
+    } else {
+      this.sortOrderIsAscending = !this.sortOrderIsAscending;
+      this.itemService.sortOrderIsAscending = this.sortOrderIsAscending;
     }
 
     this.sortBy = sortBy;
-    this.sortOrderIsAscending = !this.sortOrderIsAscending;
     this.itemService.sortBy = sortBy;
-    this.itemService.sortOrderIsAscending = this.sortOrderIsAscending;
     this.currentPage = 1;
 
     const categoryData$ = this.categoryService.getAllCategoriesFromApi();
