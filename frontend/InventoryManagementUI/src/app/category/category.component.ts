@@ -249,6 +249,12 @@ export class CategoryComponent {
     ) as HTMLInputElement;
     console.log(inputSearchElement.value);
 
+    this.currentPage = 1;
+
+    this.categoryService.ifNameFilter = true;
+    this.categoryService.categoryNameFromSearchFilter =
+      inputSearchElement.value;
+
     fromEvent(inputSearchElement, 'input')
       .pipe(
         debounceTime(300),

@@ -34,6 +34,9 @@ export class CategoryService {
   isAscendingId = false;
   ifFilterCategoryId: boolean = false;
 
+  categoryNameFromSearchFilter: string = '';
+  ifNameFilter: boolean = false;
+
   sortBy: string = 'categoryId';
   // sortOrder: string = 'id';
   sortOrderIsAscending: boolean = true;
@@ -51,21 +54,25 @@ export class CategoryService {
     status: string
   ) {
     const url = `https://localhost:5034/api/category/${page}/${itemsPerPage}`;
-    var params = new HttpParams()
+    let params = new HttpParams()
       .set('page', page.toString())
       .set('itemsPerPage', itemsPerPage.toString())
       .set('status', status)
       .set('sortBy', this.sortBy)
       .set('sortOrderIsAscending', this.sortOrderIsAscending);
 
+    if (this.ifNameFilter) {
+      params = params.set('categoryName', this.categoryNameFromSearchFilter);
+    }
+
     this.http
       .get<{ categoryData: Category[]; totalItems: number }>(url, { params })
       .subscribe({
         next: (response) => {
-          this.categoriesSubject.next(response.categoryData); // Update category data
+          this.categoriesSubject.next(response.categoryData);
           console.log(response.categoryData);
 
-          this.totalItemsSubject.next(response.totalItems); // Update total items count
+          this.totalItemsSubject.next(response.totalItems);
         },
         error: (error) => console.log('Error fetching the data', error),
       });

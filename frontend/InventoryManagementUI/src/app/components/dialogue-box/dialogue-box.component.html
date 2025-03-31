@@ -1,18 +1,27 @@
-<!-- <p>dialogue-box works!</p> -->
-<form [formGroup]="addCategoryForm">
-<h1 mat-dialog-title>{{data.title}}</h1>
-<!-- <input type="hidden" > -->
-<div mat-dialog-content>
-    <mat-form-field>
+<div class="dialogue-box-form-container">
+  <form [formGroup]="addCategoryForm">
+    <h1 mat-dialog-title>{{ data.title }}</h1>
+    <div mat-dialog-content>
+      <mat-form-field>
         <mat-label>Name</mat-label>
-        <input matInput formControlName="name" [(ngModel)]="data.name">
-    </mat-form-field>
-    <div>
+        <input matInput formControlName="name" [(ngModel)]="data.name" />
+      </mat-form-field>
+      <div>
         <mat-checkbox formControlName="active">Is Active</mat-checkbox>
+      </div>
     </div>
+    <div mat-dailog-action>
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="onSubmit()"
+        [disabled]="addCategoryForm.invalid"
+      >
+        Save
+      </button>
+      <button (click)="closeDialog()" mat-raised-button color="warn">
+        Close
+      </button>
+    </div>
+  </form>
 </div>
-<div mat-dailog-action>
-    <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="addCategoryForm.invalid">Save</button>
-    <button (click)="closeDialog()" mat-raised-button color="warn">Close</button>
-</div>
-</form>
