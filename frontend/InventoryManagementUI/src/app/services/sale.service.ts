@@ -26,6 +26,8 @@ export class SaleService {
   ifEndingDate: boolean = false;
   startingDate: Date = new Date();
   endingDate: Date = new Date();
+  specificNameFilter: boolean = false;
+  itemId: number = 0;
 
   sortBy: string = 'saleId';
   sortOrderIsAscending: boolean = true;
@@ -53,6 +55,10 @@ export class SaleService {
       .set('sortBy', this.sortBy)
       .set('sortOrderIsAscending', this.sortOrderIsAscending);
     console.log("inside item's service");
+
+    if (this.specificNameFilter) {
+      params = params.set('itemId', this.itemId.toString());
+    }
 
     if (this.ifFilter && this.ifStartingDate) {
       params = params.set('startingDate', this.startingDate.toString());

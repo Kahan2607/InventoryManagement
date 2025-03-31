@@ -29,13 +29,18 @@
         [(ngModel)]="endingDate"
       />
     </div>
+    <button
+      id="fetch-data-between-dates"
+      (click)="fetchDataBetweenDates($event)"
+    >
+      Search Records
+    </button>
     <div class="filter-buttons">
-      <button
-        id="fetch-data-between-dates"
-        (click)="fetchDataBetweenDates($event)"
-      >
-        Search Records
-      </button>
+      <select (change)="onItemNameChange($event)">
+        <option *ngFor="let item of itemNamesData" [value]="item.itemId">
+          {{ item.itemName }}
+        </option>
+      </select>
       <button class="add-sale-button" (click)="addNewSale()">
         <i class="fa fa-plus"></i> Sale
       </button>
@@ -50,10 +55,21 @@
           <th class="itemName-title" (click)="sortingSalesData('itemName')">
             ItemName
           </th>
-          <th (click)="sortingSalesData('quantity')">Quantity</th>
-          <th (click)="sortingSalesData('price')">Price</th>
-          <th (click)="sortingSalesData('salesAmount')">SalesAmount</th>
-          <th (click)="sortingSalesData('salesDate')">SalesDate</th>
+          <th class="saleQuantity-title" (click)="sortingSalesData('quantity')">
+            Quantity
+          </th>
+          <th class="salePrice-title" (click)="sortingSalesData('price')">
+            Price
+          </th>
+          <th
+            class="saleAmount-title"
+            (click)="sortingSalesData('salesAmount')"
+          >
+            SalesAmount
+          </th>
+          <th class="sale" (click)="sortingSalesData('salesDate')">
+            SalesDate
+          </th>
           <th>InsertedDate</th>
           <th>Actions</th>
         </tr>

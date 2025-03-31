@@ -4,13 +4,17 @@ import { ItemService } from '../services/item.service';
 import {
   combineLatest,
   debounceTime,
+  distinct,
   filter,
   find,
   map,
   mergeAll,
+  mergeMap,
   min,
   pipe,
   switchMap,
+  tap,
+  toArray,
 } from 'rxjs';
 import { Item } from '../model/item.type';
 import { CommonModule, NgFor } from '@angular/common';
@@ -55,6 +59,12 @@ export class SaleComponent {
     salesDate: Date;
     insertedDate: Date;
   }[] = [];
+
+  itemNamesData: {
+    itemName: string;
+    itemId: number;
+  }[] = [];
+
   items: Item[] = [];
   constructor(
     private itemService: ItemService,
@@ -72,26 +82,19 @@ export class SaleComponent {
   sortOrderIsAscending: boolean = true;
 
   ngOnInit() {
-    // this.itemService.getItemsFromApi();
-    // this.saleService.getAllSalesDetailsFromApi();
-
-    // combineLatest([this.saleService.sales$, this.itemService.items$])
-    //   .pipe(
-    //     map(([sales, items]) =>
-    //       sales.map((sale) => ({
-    //         ...sale,
-    //         itemName:
-    //           items.find((item) => item.itemId === sale.itemId)?.name ||
-    //           'Unknown',
-    //       }))
-    //     )
-    //   )
-    //   .subscribe((data) => {
-    //     this.salesData = data;
-    //     console.log('After subscribing', data);
-    //   });
     const itemData$ = this.itemService.getItemsFromApi();
     console.log(itemData$, 'This is inside categoryData');
+
+    let itemNames$ = itemData$.pipe(
+      mergeMap((items) => items),
+      map((item) => ({ itemName: item.name, itemId: item.itemId })),
+      distinct((item) => item.itemId),
+      toArray()
+    );
+
+    itemNames$.subscribe((data) => {
+      this.itemNamesData = data;
+    });
 
     this.currentPage = 1;
 
@@ -105,8 +108,11 @@ export class SaleComponent {
     this.saleService.totalSalesRecord$.subscribe((total) => {
       this.totalItems = total;
     });
+    console.log('outside combinelatest ngoninit method');
+
     combineLatest([this.saleService.sales$, itemData$])
       .pipe(
+        tap(() => console.log('inside ngOnInit call')),
         map(([sales, items]) =>
           sales.map((sale) => ({
             ...sale,
@@ -146,8 +152,6 @@ export class SaleComponent {
     const itemData$ = this.itemService.getItemsFromApi();
     console.log(itemData$, 'This is inside categoryData');
 
-    // this.currentPage = 1;
-
     this.saleService.getPaginatedSalesRecordFromApi(
       this.currentPage,
       this.itemsPerPage
@@ -158,30 +162,13 @@ export class SaleComponent {
     this.saleService.totalSalesRecord$.subscribe((total) => {
       this.totalItems = total;
     });
-    combineLatest([this.saleService.sales$, itemData$])
-      .pipe(
-        map(([sales, items]) =>
-          sales.map((sale) => ({
-            ...sale,
-            itemName:
-              items.find((item) => item.itemId === sale.itemId)?.name ||
-              'Unknown',
-          }))
-        )
-      )
-      .subscribe((data) => {
-        this.salesData = data;
-        this.filteredSalesData = [...this.salesData];
-      });
   }
 
   setData(page: number) {
-    // this.currentPage = page;
     this.saleService.page = page;
   }
 
   fetchDataBetweenDates(event: Event) {
-    // this.setData(this.currentPage);
     this.currentPage = 1;
     const salesDataBetweenDatesButton = document.getElementById(
       'fetch-data-between-dates'
@@ -213,31 +200,6 @@ export class SaleComponent {
       this.totalItems = value;
       console.log('Inside the fetchBetweenData method ', this.totalItems);
     });
-    // const filteredSalesData$ = this.saleService.sales$.pipe(
-    //   map((sales) => {
-    //     return sales.filter(
-    //       (sale) =>
-    //         sale.salesDate >= this.startingDate &&
-    //         sale.salesDate <= this.endingDate
-    //     );
-    //   })
-    // );
-
-    const tempSalesData$ = combineLatest([filteredSalesData$, itemData$])
-      .pipe(
-        map(([sales, items]) =>
-          sales.map((sale) => ({
-            ...sale,
-            itemName:
-              items.find((item) => item.itemId == sale.itemId)?.name ||
-              'Unknown',
-          }))
-        )
-      )
-      .subscribe((data) => {
-        this.salesData = data;
-        this.filteredSalesData = [...this.salesData];
-      });
   }
 
   sortingSalesData(sortBy: string) {
@@ -262,20 +224,21 @@ export class SaleComponent {
     this.saleService.totalSalesRecord$.subscribe((value) => {
       this.totalItems = value;
     });
-    combineLatest([this.saleService.sales$, itemData$])
-      .pipe(
-        map(([sales, items]) =>
-          sales.map((sale) => ({
-            ...sale,
-            itemName:
-              items.find((item) => item.itemId === sale.itemId)?.name ||
-              'Unknown',
-          }))
-        )
-      )
-      .subscribe((data) => {
-        this.salesData = data;
-        this.filteredSalesData = [...this.salesData];
-      });
+  }
+
+  onItemNameChange(event: Event) {
+    const selectedValue = (event.target as HTMLSelectElement).value;
+    console.log(selectedValue, ' the value of selectedValue');
+
+    this.saleService.itemId = parseInt(selectedValue);
+    this.saleService.specificNameFilter = true;
+
+    this.saleService.getPaginatedSalesRecordFromApi(this.currentPage, 10);
+    this.saleService.sales$.subscribe((data) => {
+      this.tempSalesData = data;
+    });
+    this.saleService.totalSalesRecord$.subscribe((value) => {
+      this.totalItems = value;
+    });
   }
 }
