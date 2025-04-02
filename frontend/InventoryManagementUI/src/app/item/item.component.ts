@@ -66,23 +66,6 @@ export class ItemComponent {
   sortBy: string = 'itemId';
   sortOrderIsAscending: boolean = true;
   ngOnInit(): void {
-    // this.itemService.getItemsFromApi();
-
-    // combineLatest([this.itemService.items$, this.categoryService.categories$]).pipe(
-    //   map(([items, categories]) =>
-    //     items.map(item => ({
-    //       ...item,
-    //       categoryName: categories.find(category => category.categoryId === item.categoryId)?.name || 'Unknown'
-
-    //     }))
-    //   )
-    // ).subscribe(data => {
-    //   this.itemsData = data;
-    // });
-    // this.itemService.getItemsCount().subscribe(
-    //   (data) => this.totalItems = data
-    // );
-
     const categoryData$ = this.categoryService.getAllCategoriesFromApi();
     console.log(categoryData$, 'This is inside categoryData');
 
@@ -116,14 +99,10 @@ export class ItemComponent {
         this.itemsData = data;
         this.filteredItemsData = [...this.itemsData];
       });
-
-    // this.setData(this.currentPage, this.status);
   }
 
   addNewItem() {
     console.log('Inside the addNewItem method ', this.status);
-
-    // this.setData(this.currentPage, this.status);
 
     this.itemService.isAdd = true;
     this.itemService.resetUpdatedItem();
@@ -156,35 +135,12 @@ export class ItemComponent {
       this.itemsPerPage,
       this.status
     );
-    // this.categoryService.categories$.subscribe(
-    //   (data) => {
-    //     this.categories = data;
-    //     this.filteredCategories = [...this.categories];
-    //   }
-    // );
     this.itemService.items$.subscribe((data) => {
       this.tempItemData = data;
     });
     this.itemService.totalItems$.subscribe((total) => {
       this.totalItems = total;
     });
-
-    combineLatest([this.itemService.items$, categoryData$])
-      .pipe(
-        map(([items, categories]) =>
-          items.map((item) => ({
-            ...item,
-            categoryName:
-              categories.find(
-                (category) => category.categoryId === item.categoryId
-              )?.name || 'Unknown',
-          }))
-        )
-      )
-      .subscribe((data) => {
-        this.itemsData = data;
-        this.filteredItemsData = [...this.itemsData];
-      });
   }
 
   onPageChange(page: number) {
@@ -207,23 +163,6 @@ export class ItemComponent {
     });
     const categoryData$ = this.categoryService.getAllCategoriesFromApi();
     console.log(categoryData$, 'This is inside categoryData');
-
-    combineLatest([this.itemService.items$, categoryData$])
-      .pipe(
-        map(([items, categories]) =>
-          items.map((item) => ({
-            ...item,
-            categoryName:
-              categories.find(
-                (category) => category.categoryId === item.categoryId
-              )?.name || 'Unknown',
-          }))
-        )
-      )
-      .subscribe((data) => {
-        this.itemsData = data;
-        this.filteredItemsData = [...this.itemsData];
-      });
   }
 
   setData(page: number, status: string) {
@@ -298,7 +237,6 @@ export class ItemComponent {
 
     this.dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        // do confirmation actions
         this.deleteItem(itemId);
       }
       this.dialogRef = undefined;
@@ -327,26 +265,9 @@ export class ItemComponent {
 
     this.itemService.items$.subscribe((data) => {
       this.tempItemData = data;
-      // this. = [...this.categories];
     });
     this.categoryService.totalItems$.subscribe((value) => {
       this.totalItems = value;
     });
-    combineLatest([this.itemService.items$, categoryData$])
-      .pipe(
-        map(([items, categories]) =>
-          items.map((item) => ({
-            ...item,
-            categoryName:
-              categories.find(
-                (category) => category.categoryId === item.categoryId
-              )?.name || 'Unknown',
-          }))
-        )
-      )
-      .subscribe((data) => {
-        this.itemsData = data;
-        this.filteredItemsData = [...this.itemsData];
-      });
   }
 }
