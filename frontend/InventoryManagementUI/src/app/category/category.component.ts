@@ -35,17 +35,6 @@ export class CategoryComponent {
   sortOrderIsAscending: boolean = true;
 
   ngOnInit(): void {
-    // this.categoryService.getCategoriesFromApi();
-    // this.categoryService.categories$.subscribe(
-    //   (data) => {
-    //     this.categories = data;
-    //     this.filteredCategories = [...this.categories];
-    //   }
-    // );
-    // this.filteredCategories = this.categories;
-    this.categoryService
-      .getCategoriesCount()
-      .subscribe((data) => (this.totalItems = data));
     this.categoryService.getPaginatedCategoriesFromApi(
       this.currentPage,
       this.itemsPerPage,
@@ -60,22 +49,6 @@ export class CategoryComponent {
     this.categoryService.totalItems$.subscribe((total) => {
       this.totalItems = total;
     });
-    console.log(this.filteredCategories);
-
-    // this.categoryService.getPaginatedCategoriesFromApi(this.currentPage, this.itemsPerPage)
-    //   this.categoryService.categories$.subscribe({
-    //   next: (response) => {
-    //     console.log(response.categoryData, response.totalItems);
-
-    //     this.filteredCategories = response.categoryData;
-    //     this.totalItems = response.totalItems;
-    //   },
-    //   error: (error) => {
-    //     console.log("Error getting paginated data from categories api call.");
-    //   }
-    // });
-
-    // this.fetchData();
   }
 
   openDialog(): void {
@@ -99,7 +72,6 @@ export class CategoryComponent {
 
     this.dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        // do confirmation actions
         this.deleteCategory(categoryId);
       }
       this.dialogRef = undefined;
@@ -170,8 +142,6 @@ export class CategoryComponent {
       this.categoryService.totalItems$.subscribe((value) => {
         this.totalItems = value;
       });
-      // this.filteredCategories = this.categories;
-      // this.fetchData();
     } else if (selectedValue === 'active') {
       this.status = 'active';
       this.categoryService.getPaginatedCategoriesFromApi(
@@ -204,23 +174,8 @@ export class CategoryComponent {
     }
   }
 
-  // fetchData(): void {
-  //   this.categoryService.getPaginatedCategoriesFromApi(this.currentPage, this.itemsPerPage).subscribe({
-  //     next: (response) => {
-  //       console.log(response.categoryData, response.totalItems);
-
-  //       this.filteredCategories = response.categoryData;
-  //       this.totalItems = response.totalItems;
-  //     },
-  //     error: (error) => {
-  //       console.log("Error getting paginated data from categories api call.");
-  //     }
-  //   });
-  // }
-
   onPageChange(page: number): void {
     this.currentPage = page;
-    // this.fetchData();
 
     this.categoryService.getPaginatedCategoriesFromApi(
       this.currentPage,
@@ -243,7 +198,6 @@ export class CategoryComponent {
   }
 
   fetchResults(event: Event) {
-    // this.setData(this.currentPage, this.status);
     const inputSearchElement = document.getElementById(
       'search-categories'
     ) as HTMLInputElement;
