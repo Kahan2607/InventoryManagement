@@ -5,8 +5,6 @@ import { AuthService } from '@auth0/auth0-angular';
   selector: 'app-home',
   imports: [],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.scss'
+  styleUrl: './home.component.scss',
 })
-export class HomeComponent {
-  
-}
+export class HomeComponent {}

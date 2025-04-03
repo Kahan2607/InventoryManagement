@@ -6,27 +6,26 @@ import { AuthService } from '@auth0/auth0-angular';
   selector: 'app-header',
   imports: [],
   templateUrl: './header.component.html',
-  styleUrl: './header.component.scss'
+  styleUrl: './header.component.scss',
 })
 export class HeaderComponent {
-  constructor(private auth: AuthService, private router: Router) {
-  }
+  constructor(private auth: AuthService, private router: Router) {}
 
-  logout(){
+  logout() {
     this.auth.logout();
   }
 
-  showCategories(){
-    console.log("In the categories routing");
-    
+  showCategories() {
+    console.log('In the categories routing');
+
     this.router.navigate(['/categories']);
   }
 
-  showItems(){
+  showItems() {
     this.router.navigate(['/items']);
   }
 
-  showSales(){
+  showSales() {
     this.router.navigate(['/sales']);
   }
 }
