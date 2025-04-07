@@ -6,69 +6,86 @@
   />
 </head>
 
-<div class="container">
-  <div class="display-item-data">
-    <div class="search-container">
-      <i class="fa-solid fa-magnifying-glass"></i>
-      <input
-        id="search-items"
-        class="search-item-input-field"
-        (input)="fetchResults($event)"
-        placeholder="Search for items..."
-      />
+<body>
+  <div class="container py-4 bg-light min-vh-100">
+    <div class="w-100">
+      <div class="d-flex align-items-center position-relative mb-3">
+        <i
+          class="fa-solid fa-magnifying-glass position-absolute ps-2 text-muted"
+        ></i>
+        <input
+          id="search-items"
+          class="form-control ps-5"
+          (input)="fetchResults($event)"
+          placeholder="Search for items..."
+        />
+      </div>
+
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <div class="d-flex align-items-center gap-2">
+          <label class="form-label mb-0" for="itemStatus">Status:</label>
+          <select
+            class="form-select form-select-sm w-auto"
+            name="itemStatus"
+            (change)="filterItems($event)"
+          >
+            <option value="all">ALL</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+        </div>
+        <button class="btn btn-success btn-sm" (click)="addNewItem()">
+          <i class="fa fa-plus"></i> Item
+        </button>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover text-center">
+          <thead class="table-dark">
+            <tr>
+              <th (click)="sortItems('itemId')" style="cursor: pointer">
+                ItemId
+              </th>
+              <th (click)="sortItems('categoryName')" style="cursor: pointer">
+                CategoryName
+              </th>
+              <th (click)="sortItems('name')" style="cursor: pointer">
+                ItemName
+              </th>
+              <th>Active</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of filteredItemsData">
+              <td>{{ item.itemId }}</td>
+              <td>{{ item.categoryName }}</td>
+              <td>{{ item.name }}</td>
+              <td>{{ item.active }}</td>
+              <td>
+                <i
+                  class="fa fa-pen-to-square text-primary me-2"
+                  (click)="updateItem(item)"
+                ></i>
+                <i
+                  class="fa-solid fa-trash text-danger"
+                  (click)="confirmMessage(item.itemId)"
+                ></i>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="d-flex justify-content-center mt-3">
+        <app-pagination
+          class="pagination-component"
+          [currentPage]="currentPage"
+          [itemsPerPage]="itemsPerPage"
+          [totalItems]="totalItems"
+          (pageChanged)="onPageChange($event)"
+        ></app-pagination>
+      </div>
     </div>
-
-    <div class="status-selector-add-item-row">
-      <label class="status-label" for="itemStatus">Status:</label>
-      <select
-        class="status-selector"
-        name="itemStatus"
-        (change)="filterItems($event)"
-      >
-        <option value="all">ALL</option>
-        <option value="active">Active</option>
-        <option value="inactive">Inactive</option>
-      </select>
-      <button class="add-item-button" (click)="addNewItem()">
-        <i class="fa fa-plus"></i> Item
-      </button>
-    </div>
-
-    <table class="item-list-table">
-      <thead>
-        <tr class="item-data-title-row">
-          <th class="itemid-title" (click)="sortItems('itemId')">ItemId</th>
-          <th class="categoryName-title" (click)="sortItems('categoryName')">
-            CategoryName
-          </th>
-          <th class="itemName-title" (click)="sortItems('name')">ItemName</th>
-          <th>Active</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of filteredItemsData">
-          <td>{{ item.itemId }}</td>
-          <td>{{ item.categoryName }}</td>
-          <td>{{ item.name }}</td>
-          <td>{{ item.active }}</td>
-          <td>
-            <i class="fa fa-pen-to-square" (click)="updateItem(item)"></i>
-            <i
-              class="fa-solid fa-trash"
-              (click)="confirmMessage(item.itemId)"
-            ></i>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-    <app-pagination
-      class="pagination-component"
-      [currentPage]="currentPage"
-      [itemsPerPage]="itemsPerPage"
-      [totalItems]="totalItems"
-      (pageChanged)="onPageChange($event)"
-    ></app-pagination>
   </div>
-</div>
+</body>
