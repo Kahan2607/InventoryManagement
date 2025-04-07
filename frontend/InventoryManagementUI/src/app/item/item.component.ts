@@ -19,6 +19,13 @@ import { Target } from '@angular/compiler';
 import { DeleteInfoMessageComponent } from '../components/delete-info-message/delete-info-message.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
+interface ItemView {
+  itemId: number;
+  categoryId: number;
+  name: string;
+  active: string;
+}
+
 @Component({
   selector: 'app-item',
   imports: [NgFor, PaginationComponent],
@@ -31,21 +38,24 @@ export class ItemComponent {
     itemId: number;
     categoryId: number;
     name: string;
-    active: boolean;
+    // active: boolean;
+    active: string;
   }[] = [];
   itemsData: {
     categoryName: string;
     itemId: number;
     categoryId: number;
     name: string;
-    active: boolean;
+    // active: boolean;
+    active: string;
   }[] = [];
   filteredItemsData: {
     categoryName: string;
     itemId: number;
     categoryId: number;
     name: string;
-    active: boolean;
+    // active: boolean;
+    active: string;
   }[] = [];
 
   paginatedData: Item[] = [];
@@ -76,9 +86,18 @@ export class ItemComponent {
       this.itemsPerPage,
       this.status
     );
-    this.itemService.items$.subscribe((data) => {
-      this.tempItemData = data;
-    });
+    this.itemService.items$
+      .pipe(
+        map((items: Item[]) =>
+          items.map((item: Item) => ({
+            ...item,
+            active: item.active ? 'Yes' : 'No',
+          }))
+        )
+      )
+      .subscribe((data) => {
+        this.tempItemData = data;
+      });
     this.itemService.totalItems$.subscribe((total) => {
       this.totalItems = total;
     });
@@ -88,6 +107,7 @@ export class ItemComponent {
         map(([items, categories]) =>
           items.map((item) => ({
             ...item,
+            active: item.active ? 'Yes' : 'No', // ✅ Convert to string
             categoryName:
               categories.find(
                 (category) => category.categoryId === item.categoryId
@@ -114,10 +134,23 @@ export class ItemComponent {
     this.itemService.deleteItem(itemID);
   }
 
-  updateItem(item: Item) {
+  updateItem(item: ItemView) {
     this.itemService.isAdd = false;
+    let itemStatus = false;
+    if (item.active === 'Yes') {
+      itemStatus = true;
+    } else if (item.active === 'No') {
+      itemStatus = false;
+    }
+
+    const newItem = {
+      itemId: item.itemId,
+      categoryId: item.categoryId,
+      name: item.name,
+      active: itemStatus,
+    };
     // this.setData(this.currentPage, this.status);
-    this.itemService.updateItemData(item);
+    this.itemService.updateItemData(newItem);
     this.router.navigate(['items/update-item']);
   }
 
@@ -135,9 +168,18 @@ export class ItemComponent {
       this.itemsPerPage,
       this.status
     );
-    this.itemService.items$.subscribe((data) => {
-      this.tempItemData = data;
-    });
+    this.itemService.items$
+      .pipe(
+        map((items: Item[]) =>
+          items.map((item: Item) => ({
+            ...item,
+            active: item.active ? 'Yes' : 'No',
+          }))
+        )
+      )
+      .subscribe((data) => {
+        this.tempItemData = data;
+      });
     this.itemService.totalItems$.subscribe((total) => {
       this.totalItems = total;
     });
@@ -155,9 +197,18 @@ export class ItemComponent {
       this.itemsPerPage,
       this.status
     );
-    this.itemService.items$.subscribe((data) => {
-      this.tempItemData = data;
-    });
+    this.itemService.items$
+      .pipe(
+        map((items: Item[]) =>
+          items.map((item: Item) => ({
+            ...item,
+            active: item.active ? 'Yes' : 'No',
+          }))
+        )
+      )
+      .subscribe((data) => {
+        this.tempItemData = data;
+      });
     this.itemService.totalItems$.subscribe((total) => {
       this.totalItems = total;
     });
@@ -212,6 +263,7 @@ export class ItemComponent {
             map(([filteredItems, categories]) =>
               filteredItems.map((item) => ({
                 ...item,
+                active: item.active ? 'Yes' : 'No', // ✅ Convert to string
                 categoryName:
                   categories.find(
                     (category) => category.categoryId === item.categoryId
@@ -263,9 +315,18 @@ export class ItemComponent {
       this.status
     );
 
-    this.itemService.items$.subscribe((data) => {
-      this.tempItemData = data;
-    });
+    this.itemService.items$
+      .pipe(
+        map((items: Item[]) =>
+          items.map((item: Item) => ({
+            ...item,
+            active: item.active ? 'Yes' : 'No',
+          }))
+        )
+      )
+      .subscribe((data) => {
+        this.tempItemData = data;
+      });
     this.categoryService.totalItems$.subscribe((value) => {
       this.totalItems = value;
     });

@@ -9,6 +9,12 @@ import { debounceTime, fromEvent, groupBy, map, switchMap, tap } from 'rxjs';
 import { PaginationComponent } from '../components/pagination/pagination.component';
 import { DeleteInfoMessageComponent } from '../components/delete-info-message/delete-info-message.component';
 
+interface CategoryView {
+  categoryId: number;
+  name: string;
+  active: string;
+}
+
 @Component({
   selector: 'app-category',
   imports: [NgFor, FormsModule, PaginationComponent],
@@ -18,8 +24,18 @@ import { DeleteInfoMessageComponent } from '../components/delete-info-message/de
 export class CategoryComponent {
   dialogRef?: MatDialogRef<DeleteInfoMessageComponent>;
 
-  categories: Category[] = [];
-  filteredCategories: Category[] = [];
+  // categories: Category[] = [];
+  categories: {
+    categoryId: number;
+    name: string;
+    active: string;
+  }[] = [];
+  // filteredCategories: Category[] = [];
+  filteredCategories: {
+    categoryId: number;
+    name: string;
+    active: string;
+  }[] = [];
   status = 'all';
 
   paginatedData: Category[] = [];
@@ -40,12 +56,22 @@ export class CategoryComponent {
       this.itemsPerPage,
       this.status
     );
-    this.categoryService.categories$.subscribe((data) => {
-      this.categories = data;
-      console.log(this.categories);
 
-      this.filteredCategories = [...this.categories];
-    });
+    this.categoryService.categories$
+      .pipe(
+        map((categories: Category[]) =>
+          categories.map((category: Category) => ({
+            ...category,
+            active: category.active ? 'Yes' : 'No',
+          }))
+        )
+      )
+      .subscribe((data) => {
+        this.categories = data;
+        console.log(this.categories);
+
+        this.filteredCategories = [...this.categories];
+      });
     this.categoryService.totalItems$.subscribe((total) => {
       this.totalItems = total;
     });
@@ -78,7 +104,13 @@ export class CategoryComponent {
     });
   }
 
-  update(category: Category) {
+  update(category: CategoryView) {
+    let categoryStatus = false;
+    if (category.active === 'Yes') {
+      categoryStatus = true;
+    } else if (category.active === 'No') {
+      categoryStatus = false;
+    }
     this.setData(this.currentPage, this.status);
     const dialogRef = this.dialog.open(DialogueBoxComponent, {
       width: '50%',
@@ -88,7 +120,7 @@ export class CategoryComponent {
         title: 'Edit',
         categoryId: category.categoryId,
         name: category.name,
-        active: category.active,
+        active: categoryStatus,
       },
     });
   }
@@ -116,10 +148,21 @@ export class CategoryComponent {
       this.status
     );
 
-    this.categoryService.categories$.subscribe((data) => {
-      this.categories = data;
-      this.filteredCategories = [...this.categories];
-    });
+    this.categoryService.categories$
+      .pipe(
+        map((categories: Category[]) =>
+          categories.map((category: Category) => ({
+            ...category,
+            active: category.active ? 'Yes' : 'No',
+          }))
+        )
+      )
+      .subscribe((data) => {
+        this.categories = data;
+        console.log(this.categories);
+
+        this.filteredCategories = [...this.categories];
+      });
     this.categoryService.totalItems$.subscribe((value) => {
       this.totalItems = value;
     });
@@ -135,10 +178,21 @@ export class CategoryComponent {
         this.itemsPerPage,
         this.status
       );
-      this.categoryService.categories$.subscribe((data) => {
-        this.categories = data;
-        this.filteredCategories = [...this.categories];
-      });
+      this.categoryService.categories$
+        .pipe(
+          map((categories: Category[]) =>
+            categories.map((category: Category) => ({
+              ...category,
+              active: category.active ? 'Yes' : 'No',
+            }))
+          )
+        )
+        .subscribe((data) => {
+          this.categories = data;
+          console.log(this.categories);
+
+          this.filteredCategories = [...this.categories];
+        });
       this.categoryService.totalItems$.subscribe((value) => {
         this.totalItems = value;
       });
@@ -149,10 +203,21 @@ export class CategoryComponent {
         this.itemsPerPage,
         'active'
       );
-      this.categoryService.categories$.subscribe((data) => {
-        this.categories = data;
-        this.filteredCategories = [...this.categories];
-      });
+      this.categoryService.categories$
+        .pipe(
+          map((categories: Category[]) =>
+            categories.map((category: Category) => ({
+              ...category,
+              active: category.active ? 'Yes' : 'No',
+            }))
+          )
+        )
+        .subscribe((data) => {
+          this.categories = data;
+          console.log(this.categories);
+
+          this.filteredCategories = [...this.categories];
+        });
       this.categoryService.totalItems$.subscribe((value) => {
         this.totalItems = value;
       });
@@ -163,10 +228,21 @@ export class CategoryComponent {
         this.itemsPerPage,
         this.status
       );
-      this.categoryService.categories$.subscribe((data) => {
-        this.categories = data;
-        this.filteredCategories = [...this.categories];
-      });
+      this.categoryService.categories$
+        .pipe(
+          map((categories: Category[]) =>
+            categories.map((category: Category) => ({
+              ...category,
+              active: category.active ? 'Yes' : 'No',
+            }))
+          )
+        )
+        .subscribe((data) => {
+          this.categories = data;
+          console.log(this.categories);
+
+          this.filteredCategories = [...this.categories];
+        });
       this.categoryService.totalItems$.subscribe((value) => {
         this.totalItems = value;
         console.log(this.totalItems);
@@ -182,10 +258,21 @@ export class CategoryComponent {
       this.itemsPerPage,
       this.status
     );
-    this.categoryService.categories$.subscribe((data) => {
-      this.categories = data;
-      this.filteredCategories = [...this.categories];
-    });
+    this.categoryService.categories$
+      .pipe(
+        map((categories: Category[]) =>
+          categories.map((category: Category) => ({
+            ...category,
+            active: category.active ? 'Yes' : 'No',
+          }))
+        )
+      )
+      .subscribe((data) => {
+        this.categories = data;
+        console.log(this.categories);
+
+        this.filteredCategories = [...this.categories];
+      });
   }
 
   ngOnDestroy() {
@@ -222,10 +309,16 @@ export class CategoryComponent {
         }),
         switchMap((searchText) =>
           this.categoryService.categories$.pipe(
-            map((categories) =>
-              categories.filter((category) =>
-                category.name.toLowerCase().includes(searchText.toLowerCase())
-              )
+            map((categories: Category[]) =>
+              categories
+                .map((category: Category) => ({
+                  categoryId: category.categoryId,
+                  name: category.name,
+                  active: category.active ? 'Yes' : 'No',
+                }))
+                .filter((category) =>
+                  category.name.toLowerCase().includes(searchText.toLowerCase())
+                )
             )
           )
         )
