@@ -39,6 +39,11 @@ table {
   background-color: rgb(130, 128, 128);
 }
 
+.fetch-data-between-dates {
+  width: 200px;
+  background-color: rgb(0, 132, 255);
+}
+
 .add-sale-button {
   // margin-top: 20px;
   width: 100px;
@@ -71,6 +76,12 @@ td {
 .ending-date {
   width: 30%;
 }
+
+// .starting-date-container{
+//   display: flex;
+//   flex-direction: row;
+
+// }
 
 .filter-buttons {
   display: flex;

@@ -30,6 +30,7 @@
       />
     </div>
     <button
+      class="fetch-data-between-dates"
       id="fetch-data-between-dates"
       (click)="fetchDataBetweenDates($event)"
     >
@@ -67,7 +68,7 @@
           >
             SalesAmount
           </th>
-          <th class="sale" (click)="sortingSalesData('salesDate')">
+          <th class="saleDate-title" (click)="sortingSalesData('salesDate')">
             SalesDate
           </th>
           <th>InsertedDate</th>

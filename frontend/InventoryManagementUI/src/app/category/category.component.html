@@ -1,73 +1,92 @@
-<!-- <p>category works!</p> -->
 <head>
+  <!-- Font Awesome -->
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
   />
 </head>
-<div class="container">
-  <div class="display-category-data">
-    <div class="search-container">
-      <i class="fa-solid fa-magnifying-glass"></i>
-      <input
-        class="search-category-input-field"
-        id="search-categories"
-        (input)="fetchResults($event)"
-        placeholder="Search for categories..."
-      />
-    </div>
-    <div class="status-selector-add-category-row">
-      <label class="status-label" for="categoryStatus">Status:</label>
-      <select
-        class="status-selector"
-        name="categoryStatus"
-        (change)="filterCategories($event)"
-      >
-        <option value="all">ALL</option>
-        <option value="active">Active</option>
-        <option value="inactive">Inactive</option>
-      </select>
-      <button class="add-category-button" (click)="openDialog()">
-        <i class="fa fa-plus"></i>Category
-      </button>
-    </div>
-    <table class="category-list-table">
-      <thead>
-        <tr class="category-data-title-row">
-          <th class="categoryId-title" (click)="sortCategories('categoryId')">
-            Id
-          </th>
-          <th class="categoryName-title" (click)="sortCategories('name')">
-            Name
-          </th>
-          <th>Active</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let items of filteredCategories">
-          <td>{{ items.categoryId }}</td>
-          <td>{{ items.name }}</td>
-          <td>{{ items.active }}</td>
-          <td>
-            <!-- <button (click)="update(items)">Edit</button> -->
-            <i class="fa fa-pen-to-square" (click)="update(items)"></i>
-            <i
-              class="fa-solid fa-trash"
-              (click)="confirmMessage(items.categoryId)"
-            ></i>
-            <!-- <button (click)="confirmMessage(items.categoryId)">Delete</button> -->
-          </td>
-        </tr>
-      </tbody>
-    </table>
+<body style="background-color: #eefcff">
+  <div class="container py-4 bg-light min-vh-100">
+    <div class="w-100">
+      <!-- Search Box -->
+      <div class="d-flex align-items-center position-relative mb-3">
+        <i
+          class="fa-solid fa-magnifying-glass position-absolute ps-2 text-muted"
+        ></i>
+        <input
+          class="form-control ps-5"
+          id="search-categories"
+          (input)="fetchResults($event)"
+          placeholder="Search for categories..."
+        />
+      </div>
 
-    <app-pagination
-      class="pagination-component"
-      [currentPage]="currentPage"
-      [itemsPerPage]="itemsPerPage"
-      [totalItems]="totalItems"
-      (pageChanged)="onPageChange($event)"
-    ></app-pagination>
+      <!-- Status Filter + Add Button -->
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <div class="d-flex align-items-center gap-2">
+          <label for="categoryStatus" class="form-label mb-0">Status:</label>
+          <select
+            class="form-select form-select-sm w-auto"
+            name="categoryStatus"
+            (change)="filterCategories($event)"
+          >
+            <option value="all">ALL</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+        </div>
+        <button class="btn btn-success btn-sm" (click)="openDialog()">
+          <i class="fa fa-plus"></i> Category
+        </button>
+      </div>
+
+      <!-- Table -->
+      <div class="table-responsive">
+        <table class="table table-bordered text-center">
+          <thead class="table-dark">
+            <tr>
+              <th
+                (click)="sortCategories('categoryId')"
+                style="cursor: pointer"
+              >
+                Id
+              </th>
+              <th (click)="sortCategories('name')" style="cursor: pointer">
+                Name
+              </th>
+              <th>Active</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let items of filteredCategories">
+              <td>{{ items.categoryId }}</td>
+              <td>{{ items.name }}</td>
+              <td>{{ items.active }}</td>
+              <td>
+                <i
+                  class="fa fa-pen-to-square text-primary me-2"
+                  (click)="update(items)"
+                ></i>
+                <i
+                  class="fa-solid fa-trash text-danger"
+                  (click)="confirmMessage(items.categoryId)"
+                ></i>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <div class="d-flex justify-content-center mt-3">
+        <app-pagination
+          [currentPage]="currentPage"
+          [itemsPerPage]="itemsPerPage"
+          [totalItems]="totalItems"
+          (pageChanged)="onPageChange($event)"
+        ></app-pagination>
+      </div>
+    </div>
   </div>
-</div>
+</body>

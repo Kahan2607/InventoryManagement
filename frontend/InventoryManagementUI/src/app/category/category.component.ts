@@ -88,7 +88,7 @@ export class CategoryComponent {
         title: 'Edit',
         categoryId: category.categoryId,
         name: category.name,
-        active: false,
+        active: category.active,
       },
     });
   }
