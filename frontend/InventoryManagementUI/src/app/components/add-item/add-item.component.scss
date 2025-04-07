@@ -1,25 +1,25 @@
-.container{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin-block: 20px;
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-block: 20px;
 }
 
-form{
-    padding-inline: 40px;
-    padding-block: 20px;
-    border: 1px solid black;
-    display: flex;
-    flex-direction: column;
+form {
+  padding-inline: 40px;
+  padding-block: 20px;
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
 }
 
-.validation-warning{
-    color: red;
-    text-align: center;
+.validation-warning {
+  color: red;
+  text-align: center;
 }
 
-select{
-    position: relative;
-    direction: ltr;
+select {
+  position: relative;
+  direction: ltr;
 }

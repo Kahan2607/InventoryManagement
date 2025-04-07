@@ -41,19 +41,22 @@ export class AddItemComponent {
     private _categoryService: CategoryService,
     private router: Router
   ) {
-    this.addItemForm = this._formBuilder.group({
-      name: ['', Validators.required],
-      category: ['', Validators.required],
-      active: [false, Validators.required],
-    });
-
     this.isAdd = this._itemService.isAdd;
     this.editItemData = this._itemService.updatedItem;
+
+    this.addItemForm = this._formBuilder.group({
+      name: [this.editItemData?.name || '', Validators.required],
+      category: [
+        { value: this.editItemData?.categoryId || '', disabled: !this.isAdd },
+        Validators.required,
+      ],
+      active: [this.editItemData?.active || false],
+    });
 
     this.addItemForm.patchValue({
       name: this.editItemData.name,
       category: this.editItemData.categoryId,
-      acive: this.editItemData.active,
+      active: this.editItemData.active,
     });
   }
 
