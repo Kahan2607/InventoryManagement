@@ -19,6 +19,7 @@ import {
 import { MatInputModule } from '@angular/material/input';
 import { Category } from '../../model/category.type';
 import { CategoryService } from '../../services/category.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-dialogue-box',
@@ -28,6 +29,7 @@ import { CategoryService } from '../../services/category.service';
     MatInputModule,
     ReactiveFormsModule,
     MatDialogModule,
+    CommonModule,
   ],
   templateUrl: './dialogue-box.component.html',
   styleUrl: './dialogue-box.component.scss',

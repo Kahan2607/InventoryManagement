@@ -18,6 +18,7 @@ import { PaginationComponent } from '../components/pagination/pagination.compone
 import { Target } from '@angular/compiler';
 import { DeleteInfoMessageComponent } from '../components/delete-info-message/delete-info-message.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { NavigationStateService } from '../navigation-state-service.service';
 
 interface ItemView {
   itemId: number;
@@ -70,7 +71,8 @@ export class ItemComponent {
     private itemService: ItemService,
     private categoryService: CategoryService,
     private router: Router,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private navStateService: NavigationStateService
   ) {}
 
   sortBy: string = 'itemId';
@@ -126,6 +128,7 @@ export class ItemComponent {
 
     this.itemService.isAdd = true;
     this.itemService.resetUpdatedItem();
+    this.navStateService.setFromItemsPage(true);
     this.router.navigate(['/items/add-item']);
   }
 
@@ -150,6 +153,7 @@ export class ItemComponent {
       active: itemStatus,
     };
     // this.setData(this.currentPage, this.status);
+    this.navStateService.setFromItemsPage(true);
     this.itemService.updateItemData(newItem);
     this.router.navigate(['items/update-item']);
   }

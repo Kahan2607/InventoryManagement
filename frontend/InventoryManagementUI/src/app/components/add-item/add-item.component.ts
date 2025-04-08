@@ -13,6 +13,7 @@ import { map } from 'rxjs';
 import { Category } from '../../model/category.type';
 import { Item } from '../../model/item.type';
 import { Router } from '@angular/router';
+import { NavigationStateService } from '../../navigation-state-service.service';
 
 @Component({
   selector: 'app-add-item',
@@ -39,6 +40,7 @@ export class AddItemComponent {
     private _formBuilder: FormBuilder,
     private _itemService: ItemService,
     private _categoryService: CategoryService,
+    private navStateService: NavigationStateService,
     private router: Router
   ) {
     this.isAdd = this._itemService.isAdd;
@@ -80,7 +82,7 @@ export class AddItemComponent {
   }
 
   ngOnDestroy() {
-    console.log('add-item component destroyed.');
+    this.navStateService.setFromItemsPage(false);
   }
 
   async onSubmit() {

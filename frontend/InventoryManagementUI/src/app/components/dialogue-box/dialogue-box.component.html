@@ -1,15 +1,26 @@
-<div class="dialogue-box-form-container">
-  <form [formGroup]="addCategoryForm">
+<!-- <div class="container w-25">
+  <form
+    [formGroup]="addCategoryForm"
+    class="d-flex flex-column align-items-center"
+  >
     <h1 mat-dialog-title>{{ data.title }}</h1>
     <div mat-dialog-content>
-      <mat-form-field>
+      <mat-form-field class="form-group">
         <mat-label>Name</mat-label>
-        <input matInput formControlName="name" [(ngModel)]="data.name" />
+        <input
+          matInput
+          formControlName="name"
+          [(ngModel)]="data.name"
+          class="form-control"
+        />
       </mat-form-field>
       <div>
-        <mat-checkbox formControlName="active" [(ngModel)]="data.active"
-          >Is Active</mat-checkbox
-        >
+        <mat-label>Active</mat-label>
+        <mat-checkbox
+          class="checkbox"
+          formControlName="active"
+          [(ngModel)]="data.active"
+        ></mat-checkbox>
       </div>
     </div>
     <div mat-dailog-action>
@@ -26,4 +37,71 @@
       </button>
     </div>
   </form>
+</div> -->
+
+<div class="container d-flex justify-content-center align-items-center py-5">
+  <div class="col-12 col-md-8 col-lg-6">
+    <div class="card shadow-sm border-0 rounded-4">
+      <div class="card-body p-4 bg-white">
+        <form [formGroup]="addCategoryForm" class="w-100">
+          <h3 mat-dialog-title class="text-center mb-4">{{ data.title }}</h3>
+
+          <div mat-dialog-content>
+            <mat-form-field class="w-100 mb-3">
+              <mat-label>Name</mat-label>
+              <input
+                [(ngModel)]="data.name"
+                matInput
+                formControlName="name"
+                placeholder="Enter category"
+                required
+              />
+              <mat-error
+                *ngIf="
+                  addCategoryForm.get('name')?.invalid &&
+                  addCategoryForm.get('name')?.touched
+                "
+              >
+                Name is required
+              </mat-error>
+            </mat-form-field>
+
+            <div class="form-check d-flex align-items-center gap-2 mb-3">
+              <mat-checkbox
+                formControlName="active"
+                [(ngModel)]="data.active"
+                color="primary"
+              >
+                Active
+              </mat-checkbox>
+            </div>
+          </div>
+
+          <div
+            mat-dialog-actions
+            class="d-flex justify-content-between mt-4 flex-wrap gap-2"
+          >
+            <button
+              mat-raised-button
+              color="primary"
+              class="flex-fill"
+              [disabled]="addCategoryForm.invalid"
+              (click)="onSubmit()"
+            >
+              Save
+            </button>
+
+            <button
+              mat-raised-button
+              color="warn"
+              class="flex-fill"
+              (click)="closeDialog()"
+            >
+              Close
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>

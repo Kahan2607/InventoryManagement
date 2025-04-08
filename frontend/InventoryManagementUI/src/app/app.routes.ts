@@ -4,6 +4,7 @@ import { ItemComponent } from './item/item.component';
 import { AuthGuard } from '@auth0/auth0-angular';
 import { Auth0Component } from './auth0/auth0.component';
 import { AddItemComponent } from './components/add-item/add-item.component';
+import { authGuard } from './auth-guard/auth.guard';
 
 export const routes: Routes = [
   {
@@ -39,6 +40,7 @@ export const routes: Routes = [
         (m) => m.AddItemComponent
       );
     },
+    canActivate: [authGuard],
   },
   {
     path: 'items/update-item',
@@ -47,6 +49,7 @@ export const routes: Routes = [
         (m) => m.AddItemComponent
       );
     },
+    canActivate: [authGuard],
   },
   {
     path: 'sales',
