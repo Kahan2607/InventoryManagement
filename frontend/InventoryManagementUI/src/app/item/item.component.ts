@@ -18,7 +18,7 @@ import { PaginationComponent } from '../components/pagination/pagination.compone
 import { Target } from '@angular/compiler';
 import { DeleteInfoMessageComponent } from '../components/delete-info-message/delete-info-message.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { NavigationStateService } from '../navigation-state-service.service';
+import { NavigationStateService } from '../services/navigation-state-service.service';
 
 interface ItemView {
   itemId: number;

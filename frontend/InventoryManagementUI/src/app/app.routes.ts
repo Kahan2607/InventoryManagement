@@ -64,6 +64,7 @@ export const routes: Routes = [
         (m) => m.AddSaleComponent
       );
     },
+    canActivate: [authGuard],
   },
   {
     path: 'sales/update-sales',
@@ -72,5 +73,6 @@ export const routes: Routes = [
         (m) => m.AddSaleComponent
       );
     },
+    canActivate: [authGuard],
   },
 ];

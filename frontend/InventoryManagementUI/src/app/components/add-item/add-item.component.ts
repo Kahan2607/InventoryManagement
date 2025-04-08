@@ -13,7 +13,7 @@ import { map } from 'rxjs';
 import { Category } from '../../model/category.type';
 import { Item } from '../../model/item.type';
 import { Router } from '@angular/router';
-import { NavigationStateService } from '../../navigation-state-service.service';
+import { NavigationStateService } from '../../services/navigation-state-service.service';
 
 @Component({
   selector: 'app-add-item',

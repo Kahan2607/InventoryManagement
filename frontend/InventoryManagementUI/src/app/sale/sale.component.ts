@@ -22,6 +22,7 @@ import { Router } from '@angular/router';
 import { Sale } from '../model/sale.type';
 import { PaginationComponent } from '../components/pagination/pagination.component';
 import { FormsModule } from '@angular/forms';
+import { NavigationStateService } from '../services/navigation-state-service.service';
 
 @Component({
   selector: 'app-sale',
@@ -69,7 +70,8 @@ export class SaleComponent {
   constructor(
     private itemService: ItemService,
     private saleService: SaleService,
-    private router: Router
+    private router: Router,
+    private navStateService: NavigationStateService
   ) {}
 
   paginatedData: Item[] = [];
@@ -133,6 +135,7 @@ export class SaleComponent {
   addNewSale() {
     this.saleService.isAdd = true;
     this.saleService.resetUpdatedSale();
+    this.navStateService.setFromSalesPage(true);
     this.router.navigate(['sales/add-sales']);
   }
 
@@ -144,6 +147,7 @@ export class SaleComponent {
   updateSalesRecord(sale: Sale) {
     this.saleService.isAdd = false;
     this.saleService.updateSaleData(sale);
+    this.navStateService.setFromSalesPage(true);
     this.router.navigate(['sales/update-sales']);
   }
 
