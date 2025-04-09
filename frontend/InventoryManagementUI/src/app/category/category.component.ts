@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { debounceTime, fromEvent, groupBy, map, switchMap, tap } from 'rxjs';
 import { PaginationComponent } from '../components/pagination/pagination.component';
 import { DeleteInfoMessageComponent } from '../components/delete-info-message/delete-info-message.component';
+import { LoadingService } from '../services/loading.service';
 
 interface CategoryView {
   categoryId: number;
@@ -44,7 +45,8 @@ export class CategoryComponent {
   totalItems!: number;
   constructor(
     private categoryService: CategoryService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private loadingService: LoadingService
   ) {}
 
   sortBy: string = 'categoryId';
@@ -75,6 +77,11 @@ export class CategoryComponent {
     this.categoryService.totalItems$.subscribe((total) => {
       this.totalItems = total;
     });
+  }
+
+  simulateLoading() {
+    this.loadingService.loadingOn();
+    setTimeout(() => this.loadingService.loadingOff(), 2000);
   }
 
   openDialog(): void {
